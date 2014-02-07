@@ -1,12 +1,11 @@
 package no.kantega.id.finland;
 
-import no.kantega.id.api.AbstractIdToken;
-import no.kantega.id.api.IdFactory;
+import no.kantega.id.api.factory.IdFactory;
 
 /**
  * @author simom 12/19/13 4:07 PM
  */
-public class FinnishIdFactory implements IdFactory<FinnishDateElement> {
+public class FinnishIdFactory implements IdFactory<FinnishIdNumber> {
 
 
     /**
@@ -15,7 +14,12 @@ public class FinnishIdFactory implements IdFactory<FinnishDateElement> {
      * @return valid id token in Finland.
      */
     @Override
-    public AbstractIdToken generate(FinnishDateElement... elements) {
-        return new FinnishIdToken(elements[0].getValidDatePart() + "ABC");
+    public FinnishIdNumber parse(String idNumber) {
+        return new FinnishIdNumber(idNumber);
+    }
+
+    @Override
+    public boolean compare(String idNumber) {
+        return false;
     }
 }
