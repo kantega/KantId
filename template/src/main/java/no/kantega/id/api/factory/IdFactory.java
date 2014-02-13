@@ -7,6 +7,4 @@ public interface IdFactory <T> {
 
     T parse(String idNumber);
 
-    boolean compare(String idNumber);
-
 }

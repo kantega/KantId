@@ -1,20 +1,19 @@
 package no.kantega.id.finland;
 
 import no.kantega.id.api.BirthDateAware;
+import no.kantega.id.api.GenderAware;
 import no.kantega.id.api.IdNumber;
 import no.kantega.id.api.LocaleAware;
 import no.kantega.id.api.OrdinalAware;
-import no.kantega.id.api.SexAware;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 
-public final class FinnishIdNumber implements LocaleAware, SexAware, BirthDateAware, OrdinalAware, IdNumber {
+public final class FinnishIdNumber implements LocaleAware, GenderAware, BirthDateAware, OrdinalAware, IdNumber {
 
     private static final String FINLAND = "FI";
 
     FinnishIdNumber(String idString) {
     }
-
 
     @Override
     public LocalDate getBirthDate() {

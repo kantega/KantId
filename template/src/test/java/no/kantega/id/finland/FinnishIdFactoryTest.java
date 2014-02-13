@@ -1,12 +1,14 @@
 package no.kantega.id.finland;
 
+import no.kantega.id.IdFactoryBuilder;
+import no.kantega.id.api.IdNumber;
+import org.hamcrest.core.Is;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Locale;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 
 public class FinnishIdFactoryTest {
 
@@ -19,8 +21,9 @@ public class FinnishIdFactoryTest {
 
     @Test
     public void parsedIdNumberHas_FIAsCountry() {
-        FinnishIdNumber idNumber =  new FinnishIdFactory().parse("123457-123J");
-        assertThat(idNumber.getCountry(), is("FI"));
+        FinnishIdNumber idNumber =  new IdFactoryBuilder().forCountry(finland).parse("123457-123J");
+
+        assertThat(idNumber.getCountry(), Is.is("FI"));
     }
 
 }

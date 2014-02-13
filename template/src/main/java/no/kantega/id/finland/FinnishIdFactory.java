@@ -17,9 +17,4 @@ public class FinnishIdFactory implements IdFactory<FinnishIdNumber> {
     public FinnishIdNumber parse(String idNumber) {
         return new FinnishIdNumber(idNumber);
     }
-
-    @Override
-    public boolean compare(String idNumber) {
-        return false;
-    }
 }
