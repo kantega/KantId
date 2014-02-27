@@ -1,18 +1,23 @@
 package no.kantega.id.api;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static java.util.Objects.requireNonNull;
 import static no.kantega.id.api.Gender.UNKNOWN;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.trim;
 
 public class IdNumber {
 
-    private final String idToken;
+    protected final String idToken;
 
     public IdNumber(final String idToken) {
-        requireNonNull(idToken, "IdToken must not be null.");
-        this.idToken = idToken;
+        if (isBlank(idToken)) {
+            throw new IllegalArgumentException("Id token was empty or null.");
+        }
+        this.idToken = trim(idToken);
     }
 
     public static IdNumber forId(String idNumber) {
@@ -31,4 +36,18 @@ public class IdNumber {
         Gender gender = genderFunction.apply(this);
         return gender != null ? gender : UNKNOWN;
     }
+
+    public LocalDate birthday(final Function<IdNumber, LocalDate> birthDayFunction) {
+        return birthDayFunction.apply(this);
+    }
+
+    public Period age(final Function<IdNumber, Period> ageFunction) {
+        Period age = ageFunction.apply(this).normalized();
+        if (age.isNegative()) {
+            return Period.ZERO;
+        }
+        return age;
+
+    }
+
 }
