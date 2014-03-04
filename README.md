@@ -2,4 +2,6 @@ KantId
 ======
 
 Library for identity identification
-Simo branch
+* Lightway
+* Functional
+* Extendable
