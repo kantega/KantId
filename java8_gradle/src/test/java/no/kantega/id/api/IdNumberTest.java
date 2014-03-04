@@ -36,7 +36,7 @@ public class IdNumberTest {
     public void negativeAge_WillReturn_ZeroAge() {
         IdNumber idNumber = forId("123456-123J");
         assertThat(
-            idNumber.age(idNumber1 -> Period.between(now(), now().minusDays(2))),
+            idNumber.age(id-> Period.between(now(), now().minusDays(2))),
             is(Period.ZERO));
     }
 
