@@ -24,7 +24,7 @@ public class SwedishIdNumber extends LocalIdNumber {
 
     @Override
     public boolean supports(Locale locale) {
-        return SWEDEN.equals(locale);
+        return SWEDEN.getCountry().equals(locale.getCountry());
     }
 
     /**
