@@ -23,19 +23,6 @@ public class DanishIdNumber extends LocalIdNumber {
         return new DanishIdNumber(idString, LOCALE_DENMARK);
     }
 
-    public boolean isValid() {
-        return super.isValid(DanishIdNumber::validate1968);
-    }
-
-    public Gender gender() {
-        return super.gender(DanishIdNumber::determineGender);
-    }
-
-    public LocalDate birthday() {
-        return super.birthday(DanishIdNumber::determineBirthdate);
-
-    }
-
     public static boolean validate1968(final IdNumber number) {
         if (!number.getIdToken().matches("(\\d){10}")) {
             return false;
@@ -55,11 +42,11 @@ public class DanishIdNumber extends LocalIdNumber {
         return controlSum % 11 == 0;
     }
 
-    public static Gender determineGender(final IdNumber number) {
+    public static Gender gender(final IdNumber number) {
         return (Character.getNumericValue(number.getIdToken().charAt(9)) & 1) == 0 ? Gender.FEMALE : Gender.MALE;
     }
 
-    public static LocalDate determineBirthdate(final IdNumber number) {
+    public static LocalDate birthday(final IdNumber number) {
         if (!validate1968(number)) {
             return null; // should throw exception
         }

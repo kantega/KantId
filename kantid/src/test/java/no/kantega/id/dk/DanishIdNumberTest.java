@@ -18,22 +18,22 @@ public class DanishIdNumberTest {
     private static final String FEMALE_ID1 = "0204850372";
     @Test
     public void testValidity() {
-        assertThat(forId(MALE_ID1).isValid(),is(true));
-        assertThat(forId(FEMALE_ID1).isValid(),is(true));
-        assertThat(forId("1234567890").isValid(),is(false));
-        assertThat(forId("020485-0011").isValid(),is(false));
+        assertThat(forId(MALE_ID1).isValid(DanishIdNumber::validate1968),is(true));
+        assertThat(forId(FEMALE_ID1).isValid(DanishIdNumber::validate1968),is(true));
+        assertThat(forId("1234567890").isValid(DanishIdNumber::validate1968),is(false));
+        assertThat(forId("020485-0011").isValid(DanishIdNumber::validate1968),is(false));
     }
 
     @Test
     public void testGender() {
-        assertThat(forId(MALE_ID1).gender(), is(Gender.MALE));
-        assertThat(forId(FEMALE_ID1).gender(), is(Gender.FEMALE));
+        assertThat(forId(MALE_ID1).gender(DanishIdNumber::gender), is(Gender.MALE));
+        assertThat(forId(FEMALE_ID1).gender(DanishIdNumber::gender), is(Gender.FEMALE));
     }
 
     @Test
-    public void testBirthDate() {
-        assertThat(forId(MALE_ID1).birthday(), is(LocalDate.of(1985, Month.APRIL, 2)));
-        assertThat(forId(MALE_ID2).birthday(), is(LocalDate.of(2015, Month.APRIL, 5)));
+    public void testBirthDay() {
+        assertThat(forId(MALE_ID1).birthday(DanishIdNumber::birthday), is(LocalDate.of(1985, Month.APRIL, 2)));
+        assertThat(forId(MALE_ID2).birthday(DanishIdNumber::birthday), is(LocalDate.of(2015, Month.APRIL, 5)));
     }
 
 }
