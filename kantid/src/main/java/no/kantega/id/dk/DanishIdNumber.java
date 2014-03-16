@@ -23,8 +23,12 @@ public class DanishIdNumber extends LocalIdNumber {
         return new DanishIdNumber(idString, LOCALE_DENMARK);
     }
 
+    public static boolean validate(final IdNumber number) {
+        return number.getIdToken().matches("(\\d){10}");
+    }
+
     public static boolean validate1968(final IdNumber number) {
-        if (!number.getIdToken().matches("(\\d){10}")) {
+        if (!validate(number)) {
             return false;
         }
 
@@ -43,42 +47,47 @@ public class DanishIdNumber extends LocalIdNumber {
     }
 
     public static Gender gender(final IdNumber number) {
+        if (!validate(number)) {
+            return Gender.UNKNOWN;
+        }
         return (Character.getNumericValue(number.getIdToken().charAt(9)) & 1) == 0 ? Gender.FEMALE : Gender.MALE;
     }
 
     public static LocalDate birthday(final IdNumber number) {
-        if (!validate1968(number)) {
-            return null; // should throw exception
+        if (!validate(number)) {
+            return null;
         }
 
         int day=Integer.parseInt(number.getIdToken().substring(0,2));
         int month=Integer.parseInt(number.getIdToken().substring(2,4));
         int shortYear=Integer.parseInt(number.getIdToken().substring(4,6));
 
-        int year = shortYear + findYear(shortYear, Character.getNumericValue(number.getIdToken().charAt(7)));
+        int year = calculateYear(shortYear, Character.getNumericValue(number.getIdToken().charAt(7)));
 
         return LocalDate.of(year, month, day);
     }
 
-    private static int findYear(int shortYear, int yearCenturyPart) {
+    private static int calculateYear(int shortYear, int yearCenturyPart) {
+        int century;
         if (yearCenturyPart>=0 && yearCenturyPart <=3) {
-            return 1900;
+            century = 1900;
         }
         else if (yearCenturyPart==4||yearCenturyPart==9)   {
             if (shortYear >=0 || shortYear <=36) {
-                return 2000;
+                century =  2000;
             }
             else {
-                return 1900;
+                century =  1900;
             }
         }
         else {
             if (shortYear>=58 && shortYear<=99) {
-                return 1800;
+                century =  1800;
             }
             else {
-                return 2000;
+                century =  2000;
             }
         }
+        return century + shortYear;
     }
 }

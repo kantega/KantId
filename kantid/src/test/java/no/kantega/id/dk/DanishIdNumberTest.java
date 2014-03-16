@@ -8,6 +8,7 @@ import java.time.Month;
 
 import static no.kantega.id.dk.DanishIdNumber.forId;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 
@@ -28,12 +29,15 @@ public class DanishIdNumberTest {
     public void testGender() {
         assertThat(forId(MALE_ID1).gender(DanishIdNumber::gender), is(Gender.MALE));
         assertThat(forId(FEMALE_ID1).gender(DanishIdNumber::gender), is(Gender.FEMALE));
+        assertThat(forId("1234").gender(DanishIdNumber::gender), is(Gender.UNKNOWN));
+
     }
 
     @Test
     public void testBirthDay() {
         assertThat(forId(MALE_ID1).birthday(DanishIdNumber::birthday), is(LocalDate.of(1985, Month.APRIL, 2)));
         assertThat(forId(MALE_ID2).birthday(DanishIdNumber::birthday), is(LocalDate.of(2015, Month.APRIL, 5)));
+        assertThat(forId("1234").birthday(DanishIdNumber::birthday), is(nullValue()));
     }
 
 }
