@@ -35,11 +35,11 @@ public class IdNumber {
     }
 
     public Optional<Gender> gender(final Function<IdNumber, Optional<Gender>> genderFunction) {
-        return Optional.of(genderFunction.apply(this));
+        return genderFunction.apply(this);
     }
 
     public Optional<LocalDate> birthday(final Function<IdNumber, Optional<LocalDate>> birthDayFunction) {
-        return Optional.of(birthDayFunction.apply(this));
+        return birthDayFunction.apply(this);
     }
 
     public Optional<Period> age(final Function<IdNumber, Optional<LocalDate>> birthDayFunction) {
