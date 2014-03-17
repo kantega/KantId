@@ -9,6 +9,8 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.Locale;
 
+import static java.time.LocalDate.now;
+
 public class NorwegianIdNumber extends LocalIdNumber {
 
     public static enum Type {
@@ -188,7 +190,7 @@ public class NorwegianIdNumber extends LocalIdNumber {
     }
 
     public static Period age(final IdNumber idNumber) {
-        return birthday(idNumber).periodUntil(LocalDate.now());
+        return birthday(idNumber).until(now());
     }
 
     public static Type type(final IdNumber idNumber) {

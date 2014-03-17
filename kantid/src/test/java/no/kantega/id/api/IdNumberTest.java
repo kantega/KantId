@@ -2,10 +2,11 @@ package no.kantega.id.api;
 
 import org.junit.Test;
 
-import java.time.Period;
+import java.util.Optional;
 import java.util.function.Function;
 
 import static java.time.LocalDate.now;
+import static java.time.Period.ZERO;
 import static no.kantega.id.api.IdNumber.forId;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -35,11 +36,8 @@ public class IdNumberTest {
     @Test
     public void negativeAge_WillReturn_ZeroAge() {
         IdNumber idNumber = forId("123456-123J");
-        assertThat(
-            idNumber.age(id-> Period.between(now(), now().minusDays(2))),
-            is(Period.ZERO));
+        assertThat(idNumber.age((b) -> Optional.of(now().plusDays(2))).get(), is(ZERO));
     }
-
 
     private void assertExceptionWithInvalidArgument(Function<String, IdNumber> function, String argument) {
         try {

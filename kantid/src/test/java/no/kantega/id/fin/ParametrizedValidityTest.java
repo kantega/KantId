@@ -12,8 +12,11 @@ import java.nio.file.Paths;
 import java.util.Collection;
 
 import static java.util.stream.Collectors.toList;
+import static no.kantega.id.api.Gender.FEMALE;
+import static no.kantega.id.api.Gender.MALE;
 import static no.kantega.id.fin.FinnishIdNumber.forId;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 import static org.junit.runners.Parameterized.Parameter;
 import static org.junit.runners.Parameterized.Parameters;
 
@@ -32,6 +35,20 @@ public class ParametrizedValidityTest {
     @Test
     public void testValidity() {
         assertTrue("Expected " + ssnInput + " to be valid ssn.", forId(ssnInput).isValid(FinnishIdNumber::valid));
+    }
+
+    @Test
+    public void testGender_IsFemale() {
+        assumeTrue((int) ssnInput.charAt(7) % 2 == 0);
+
+        assertTrue(forId(ssnInput).gender(FinnishIdNumber::gender).get() == FEMALE);
+    }
+
+    @Test
+    public void testGender_IsMmale() {
+        assumeTrue((int) ssnInput.charAt(7) % 2 == 1);
+
+        assertTrue(forId(ssnInput).gender(FinnishIdNumber::gender).get() == MALE);
     }
 
 
