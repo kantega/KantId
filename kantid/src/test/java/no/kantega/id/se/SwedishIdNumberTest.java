@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import static no.kantega.id.api.Gender.FEMALE;
 import static no.kantega.id.api.Gender.MALE;
+import static no.kantega.id.se.SwedishIdNumber.SE_COUNTRY;
 import static no.kantega.id.se.SwedishIdNumber.SWEDEN;
 import static no.kantega.id.se.SwedishIdNumber.forId;
 import static org.junit.Assert.assertEquals;
@@ -14,17 +15,17 @@ import static org.junit.Assert.assertNotNull;
 
 public class SwedishIdNumberTest {
 
-    public static final String VALID_SWEDISH_ID = "12342144123";
+    public static final String VALID_SWEDISH_ID = "900304-4428";
 
     public static final String EMPTY = "";
 
-    public static final String SWEDISH_MAN = "toDoManSwed";
+    public static final String SWEDISH_MAN = "081231+6214";
 
-    private static final String SWEDISH_WOMAN = "toDoWomenSwed";
+    private static final String SWEDISH_WOMAN = "7812310006";
 
-    public static final LocalDate BIRTHDAY_DATE = LocalDate.of(1, 1, 1980);
+    public static final LocalDate BIRTHDAY_DATE = LocalDate.of(1908, 12, 31);
 
-    public static final int AGE = 34;
+    public static final int AGE = 105;
 
     @Test
     public void testConstructorValid() {
@@ -48,26 +49,28 @@ public class SwedishIdNumberTest {
 
     @Test
     public void mastAllowSwedishWithOtherLanguage() {
-        assertNotNull("Constructor can never return null", forId(VALID_SWEDISH_ID, new Locale("ss", "SE")));
+        assertNotNull("Constructor can never return null", forId(VALID_SWEDISH_ID, new Locale("fi", SE_COUNTRY)));
     }
 
     @Test
     public void canExctractGenderForMen() {
-        assertEquals("Given IdNumber identifies a men", MALE, forId(SWEDISH_MAN).gender(SwedishIdNumber::gender));
+        assertEquals("Given IdNumber identifies a men", MALE, forId(SWEDISH_MAN).gender(SwedishIdNumber::gender).get());
     }
 
     @Test
     public void canExctractGenderForWomen() {
-        assertEquals("Given IdNumber identifies a women", FEMALE, forId(SWEDISH_WOMAN).gender(SwedishIdNumber::gender));
+        assertEquals("Given IdNumber identifies a women", FEMALE,
+            forId(SWEDISH_WOMAN).gender(SwedishIdNumber::gender).get());
     }
 
     @Test
     public void mustBeAbleToExtractTheRighDate() {
-        assertEquals("Wrong date was calculated", BIRTHDAY_DATE, forId(SWEDISH_MAN).birthday(SwedishIdNumber::birthdate));
+        assertEquals("Wrong date was calculated", BIRTHDAY_DATE,
+            forId(SWEDISH_MAN).birthday(SwedishIdNumber::birthday).get());
     }
 
     @Test
     public void mustReturnTheRightAge() {
-        assertEquals("Wrong age", AGE, forId(SWEDISH_MAN).age(SwedishIdNumber::age));
+        assertEquals("Wrong age", AGE, forId(SWEDISH_MAN).age(SwedishIdNumber::birthday).get().getYears());
     }
 }
