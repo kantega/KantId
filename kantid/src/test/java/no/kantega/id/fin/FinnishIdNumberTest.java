@@ -68,7 +68,9 @@ public class FinnishIdNumberTest {
 
     @Test
     public void centuryIs_TakenFromSeparator() {
-
+        assertThat(forId("270274-885N").birthday(FinnishIdNumber::birthday).get().getYear(), is(1974));
+        assertThat(forId("010290+3581").birthday(FinnishIdNumber::birthday).get().getYear(), is(1890));
+        assertThat(forId("231211A5182").birthday(FinnishIdNumber::birthday).get().getYear(), is(2011));
     }
 
 }
