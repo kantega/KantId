@@ -2,10 +2,12 @@ package no.kantega.id.api;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static no.kantega.id.api.Gender.UNKNOWN;
+import static java.time.LocalDate.now;
+import static java.time.Period.ZERO;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.trim;
 
@@ -29,25 +31,20 @@ public class IdNumber {
     }
 
     public boolean isValid(final Predicate<IdNumber> validityTest) {
-        return this.getIdToken() != null && validityTest.test(this);
+        return validityTest.test(this);
     }
 
-    public Gender gender(final Function<IdNumber, Gender> genderFunction) {
-        Gender gender = genderFunction.apply(this);
-        return gender != null ? gender : UNKNOWN;
+    public Optional<Gender> gender(final Function<IdNumber, Optional<Gender>> genderFunction) {
+        return Optional.of(genderFunction.apply(this));
     }
 
-    public LocalDate birthday(final Function<IdNumber, LocalDate> birthDayFunction) {
-        return birthDayFunction.apply(this);
+    public Optional<LocalDate> birthday(final Function<IdNumber, Optional<LocalDate>> birthDayFunction) {
+        return Optional.of(birthDayFunction.apply(this));
     }
 
-    public Period age(final Function<IdNumber, Period> ageFunction) {
-        Period age = ageFunction.apply(this).normalized();
-        if (age.isNegative()) {
-            return Period.ZERO;
-        }
-        return age;
-
+    public Optional<Period> age(final Function<IdNumber, Optional<LocalDate>> birthDayFunction) {
+        return birthDayFunction.apply(this)
+            .map((birthday) -> birthday.until(now()))
+            .map((period) -> period.isNegative() ? ZERO : period);
     }
-
 }

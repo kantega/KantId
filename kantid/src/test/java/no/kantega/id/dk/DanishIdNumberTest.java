@@ -17,6 +17,7 @@ public class DanishIdNumberTest {
     private static final String MALE_ID1 = "0204850011";
     private static final String MALE_ID2 = "0504156907";
     private static final String FEMALE_ID1 = "0204850372";
+
     @Test
     public void testValidity() {
         assertThat(forId(MALE_ID1).isValid(DanishIdNumber::validate1968),is(true));

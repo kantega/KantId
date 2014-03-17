@@ -25,7 +25,7 @@ public class ParametrizedValidityTest {
 
     @Parameters
     public static Collection<Object[]> data() throws URISyntaxException, IOException {
-        Path filePath = Paths.get(ClassLoader.class.getResource("/generated_valid_numbers.txt").toURI());
+        Path filePath = Paths.get(ClassLoader.class.getResource("/fi/generated_valid_numbers.txt").toURI());
         return Files.lines(filePath).map(ssn -> new Object[]{ssn}).collect(toList());
     }
 
