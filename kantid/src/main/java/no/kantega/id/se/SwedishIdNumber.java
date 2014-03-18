@@ -4,6 +4,7 @@ import no.kantega.id.api.Gender;
 import no.kantega.id.api.IdNumber;
 import no.kantega.id.api.LocalIdNumber;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Locale;
 import java.util.Optional;
@@ -23,6 +24,8 @@ public class SwedishIdNumber extends LocalIdNumber {
     public static final String SE_COUNTRY = "SE";
 
     public static final Locale SWEDEN = new Locale("se", SE_COUNTRY);
+
+    public static final String VALID_FORMT_SE = "(\\d{6}|\\d{8})(\\+|\\-?)(\\d{4})";
 
     public SwedishIdNumber(String idToken, Locale locale) {
         super(idToken, locale);
@@ -70,17 +73,20 @@ public class SwedishIdNumber extends LocalIdNumber {
      */
     public static boolean valid(IdNumber idNumber) {
         String id = idNumber.getIdToken();
-        boolean matches = id.matches("(\\d{6}|\\d{8})(\\+|\\-?)(\\d{4})");
-        return matches && new Interpreter(id).checkControl();
+        if (id.matches(VALID_FORMT_SE)) {
+            Interpreter interpreter = new Interpreter(id);
+            return interpreter.checkControl() && interpreter.validateDate();
+        }
+        return false;
     }
-
 
     /**
      * Extracts the gender from the given person number follwing the
      * specification for the swedish person Number
      *
      * @param idNumber The IdNumber to consider
-     * @return The gender associated to the given idNumber
+     * @return The gender associated to the given idNumber. Returns
+     * Optional.empty() in case it is not possible to calculate the Date
      */
     public static Optional<Gender> gender(IdNumber idNumber) {
         try {
@@ -146,6 +152,15 @@ public class SwedishIdNumber extends LocalIdNumber {
 
         Gender calculateGender() {
             return personal % 2 == 0 ? FEMALE : MALE;
+        }
+
+        boolean validateDate() {
+            try {
+                generateBday();
+            } catch (DateTimeException dte) {
+                return false;
+            }
+            return true;
         }
 
         boolean checkControl() {
