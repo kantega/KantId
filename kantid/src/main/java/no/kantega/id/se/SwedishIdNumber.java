@@ -143,7 +143,7 @@ public class SwedishIdNumber extends LocalIdNumber {
                     fillDigits(token, 0, 0);
                     break;
             }
-            day = manageSamordningsNumber(day);
+            day = manageCoordinationNumber(day);
         }
 
         LocalDate generateBday() {
@@ -203,7 +203,7 @@ public class SwedishIdNumber extends LocalIdNumber {
             year += now().get(YEAR) - actulYearModulo100 - 100;
         }
 
-        private int manageSamordningsNumber(int dayOfBirth) {
+        private int manageCoordinationNumber(int dayOfBirth) {
             return dayOfBirth > 31 ? dayOfBirth - 60 : dayOfBirth;
         }
 
