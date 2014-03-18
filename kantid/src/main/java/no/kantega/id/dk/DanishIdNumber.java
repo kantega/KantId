@@ -6,9 +6,11 @@ import no.kantega.id.api.LocalIdNumber;
 
 import java.time.LocalDate;
 import java.util.Locale;
+import java.util.Optional;
 
 import static java.lang.Character.getNumericValue;
 import static java.lang.Integer.parseInt;
+import static java.util.Optional.empty;
 import static no.kantega.id.api.Gender.FEMALE;
 import static no.kantega.id.api.Gender.MALE;
 
@@ -22,12 +24,18 @@ public class DanishIdNumber extends LocalIdNumber {
 
     private static final int GENDER_BIT = 9;
 
+    private static final int CONTROL_MODULO = 11;
+
     public DanishIdNumber(String idToken, Locale locale) {
         super(idToken, locale);
     }
 
     public static DanishIdNumber forId(String idString) {
         return new DanishIdNumber(idString, LOCALE_DENMARK);
+    }
+
+    public static DanishIdNumber forId(String idString, Locale locale) {
+        return new DanishIdNumber(idString, locale);
     }
 
     public static boolean validate(final IdNumber number) {
@@ -50,28 +58,29 @@ public class DanishIdNumber extends LocalIdNumber {
             3 * getNumericValue(number.getIdToken().charAt(7)) +
             2 * getNumericValue(number.getIdToken().charAt(8)) +
             getNumericValue(number.getIdToken().charAt(9));
-        return controlSum % 11 == 0;
+        return controlSum % CONTROL_MODULO == 0;
     }
 
-    public static Gender gender(final IdNumber number) {
+    public static Optional<Gender> gender(final IdNumber number) {
         if (!validate(number)) {
-            return Gender.UNKNOWN;
+            return empty();
         }
-        return (getNumericValue(number.getIdToken().charAt(GENDER_BIT)) & 1) == 0 ? FEMALE : MALE;
+        return (getNumericValue(number.getIdToken().charAt(GENDER_BIT)) & 1) == 0
+            ? Optional.of(FEMALE)
+            : Optional.of(MALE);
     }
 
-    public static LocalDate birthday(final IdNumber number) {
+    public static Optional<LocalDate> birthday(final IdNumber number) {
         if (!validate(number)) {
-            return null;
+            return empty();
         }
 
         int day= parseInt(number.getIdToken().substring(0, 2));
         int month= parseInt(number.getIdToken().substring(2, 4));
         int shortYear= parseInt(number.getIdToken().substring(4, 6));
-
         int year = calculateYear(shortYear, getNumericValue(number.getIdToken().charAt(7)));
 
-        return LocalDate.of(year, month, day);
+        return Optional.of(LocalDate.of(year, month, day));
     }
 
     private static int calculateYear(int shortYear, int yearCenturyPart) {
@@ -92,5 +101,10 @@ public class DanishIdNumber extends LocalIdNumber {
             }
         }
         return century + shortYear;
+    }
+
+    @Override
+    protected boolean supports(Locale locale) {
+        return locale != null && LOCALE_DENMARK.getCountry().equals(locale.getCountry());
     }
 }
