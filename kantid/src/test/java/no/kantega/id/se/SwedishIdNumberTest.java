@@ -12,6 +12,7 @@ import static no.kantega.id.se.SwedishIdNumber.SWEDEN;
 import static no.kantega.id.se.SwedishIdNumber.forId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class SwedishIdNumberTest {
 
@@ -72,5 +73,13 @@ public class SwedishIdNumberTest {
     @Test
     public void mustReturnTheRightAge() {
         assertEquals("Wrong age", AGE, forId(SWEDISH_MAN).age(SwedishIdNumber::birthday).get().getYears());
+    }
+
+    @Test
+    public void testValid() {
+        assertTrue(forId("720620-1381").isValid(SwedishIdNumber::valid));
+        assertTrue("050605+0830", forId("050605+0830").isValid(SwedishIdNumber::valid));
+        assertTrue("200102203460", forId("200102203460").isValid(SwedishIdNumber::valid));
+        assertTrue("090610-0540", forId("090610-0540").isValid(SwedishIdNumber::valid));
     }
 }

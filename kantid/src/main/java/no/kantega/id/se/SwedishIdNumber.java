@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.Locale;
 import java.util.Optional;
 
+import static java.lang.Character.getNumericValue;
 import static java.lang.Integer.parseInt;
 import static java.time.LocalDate.now;
 import static java.time.temporal.ChronoField.DAY_OF_MONTH;
@@ -69,7 +70,7 @@ public class SwedishIdNumber extends LocalIdNumber {
      */
     public static boolean valid(IdNumber idNumber) {
         String id = idNumber.getIdToken();
-        boolean matches = id.matches("(\\d{6}||\\d{8})(\\+\\-?)(\\d{4})");
+        boolean matches = id.matches("(\\d{6}|\\d{8})(\\+|\\-?)(\\d{4})");
         return matches && new Interpreter(id).checkControl();
     }
 
@@ -150,9 +151,10 @@ public class SwedishIdNumber extends LocalIdNumber {
         boolean checkControl() {
             int sum = 0;
             for (int i = 0; i < digits.length; i++) {
-                sum += digits[i] * (((i + 1) % 2) + 1);
+                int product = digits[i] * (((i + 1) % 2) + 1);
+                sum += product % 10 + product / 10;
             }
-            return control == sum % 10;
+            return control == (10 - (sum % 10)) % 10;
         }
 
         private void manageYear(boolean olderThen100) {
@@ -192,7 +194,7 @@ public class SwedishIdNumber extends LocalIdNumber {
 
         private void fillDigits(String id, int start1, int start2) {
             for (int i = 0; i < digits.length; i++) {
-                digits[i] = i < 6 ? id.charAt(start1 + i) : id.charAt(start2 + i);
+                digits[i] = getNumericValue(i < 6 ? id.charAt(start1 + i) : id.charAt(start2 + i));
             }
         }
     }
