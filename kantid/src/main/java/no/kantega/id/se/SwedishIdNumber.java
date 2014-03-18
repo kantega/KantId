@@ -19,6 +19,21 @@ import static java.util.Optional.empty;
 import static no.kantega.id.api.Gender.FEMALE;
 import static no.kantega.id.api.Gender.MALE;
 
+/**
+ *
+ * Provides utility methods for the swedish Id number.
+ * If follows the specification given by <a href="http://sv.wikipedia.org/wiki/Personnummer_i_Sverige">Wikipedia</a>
+ *
+ * It supports id numbers provided in the following formats:
+ * 1) yyMMdd-pppc
+ * 2) yyMMddpppc
+ * 3) yyyyMMddpppc
+ *
+ * where ppp is for the gender/location part and c is teh control number.
+ *
+ * Support is also provided for the "samordningsnummer" in all 3 variations.
+ *
+ */
 public class SwedishIdNumber extends LocalIdNumber {
 
     public static final String SE_COUNTRY = "SE";
@@ -81,7 +96,7 @@ public class SwedishIdNumber extends LocalIdNumber {
     }
 
     /**
-     * Extracts the gender from the given person number follwing the
+     * Extracts the gender from the given person number following the
      * specification for the swedish person Number
      *
      * @param idNumber The IdNumber to consider
