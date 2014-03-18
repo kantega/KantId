@@ -31,7 +31,7 @@ public class FinnishIdNumber extends LocalIdNumber {
         'M', 'N', 'P', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Z'
     };
 
-    private static final Pattern idNumberPattern =
+    private static final Pattern IDNUMBER_PATTERN =
         compile("([0-3][0-9])([0-1][0-9])([0-9]{2})(\\-|[A]|\\+)([0-9]{3})([0-9]|[A-Z])");
 
     private static final int DAY = 1;
@@ -73,16 +73,16 @@ public class FinnishIdNumber extends LocalIdNumber {
 
     public static boolean valid(final IdNumber idNumber) {
         FinnishIdNumber finnishIdNumber = forId(idNumber.getIdToken());
-        Matcher format = idNumberPattern.matcher(finnishIdNumber.getIdToken());
+        Matcher format = IDNUMBER_PATTERN.matcher(finnishIdNumber.getIdToken());
         return format.matches()
-               && finnishIdNumber.getBirthday(format).isPresent()
-               && finnishIdNumber.controlCharIsCorrect(format);
+               && finnishIdNumber.birthdayFor(format).isPresent()
+               && finnishIdNumber.hasValidControl(format);
     }
 
     public static Optional<LocalDate> birthday(final IdNumber idNumber) {
-        final Matcher format = idNumberPattern.matcher(idNumber.getIdToken());
+        final Matcher format = IDNUMBER_PATTERN.matcher(idNumber.getIdToken());
         if (format.matches()) {
-            return forId(idNumber.getIdToken()).getBirthday(format);
+            return forId(idNumber.getIdToken()).birthdayFor(format);
         }
         return empty();
 
@@ -92,13 +92,13 @@ public class FinnishIdNumber extends LocalIdNumber {
         return (int) idNumber.getIdToken().charAt(GENDER_BIT);
     }
 
-    private boolean controlCharIsCorrect(Matcher format) {
-        int controlNumber = valueOf(format.group(DAY) + format.group(MONTH) +
-                                    format.group(YEAR) + format.group(CONTROL_NUMBER));
-        return format.group(CONTROL_CHAR).charAt(0) == CONTROL_CHARS[controlNumber % DIVIDER];
+    private boolean hasValidControl(Matcher idFormat) {
+        int controlNumber = valueOf(idFormat.group(DAY) + idFormat.group(MONTH) +
+                                    idFormat.group(YEAR) + idFormat.group(CONTROL_NUMBER));
+        return idFormat.group(CONTROL_CHAR).charAt(0) == CONTROL_CHARS[controlNumber % DIVIDER];
     }
 
-    private Optional<LocalDate> getBirthday(Matcher format) {
+    private Optional<LocalDate> birthdayFor(Matcher format) {
         try {
             return Optional.of(
                 LocalDate.of(centuryFrom(format.group(SEPARATOR).charAt(0)) + valueOf(format.group(YEAR)),

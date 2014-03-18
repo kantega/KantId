@@ -16,7 +16,6 @@ import static java.time.temporal.ChronoField.YEAR;
 import static java.util.Optional.empty;
 import static no.kantega.id.api.Gender.FEMALE;
 import static no.kantega.id.api.Gender.MALE;
-import static no.kantega.id.api.Gender.UNKNOWN;
 
 public class SwedishIdNumber extends LocalIdNumber {
 
@@ -86,7 +85,7 @@ public class SwedishIdNumber extends LocalIdNumber {
         try {
             return Optional.of(new Interpreter(idNumber.getIdToken()).calculateGender());
         } catch (NumberFormatException e) {
-            return Optional.of(UNKNOWN);
+            return empty();
         }
     }
 
@@ -116,11 +115,11 @@ public class SwedishIdNumber extends LocalIdNumber {
 
             switch (token.length()) {
                 case 11:
-                    boolean olderThen100 = token.charAt(7) == '+';
+                    boolean olderThan100 = token.charAt(7) == '+';
                     day = parseInt(token.substring(4, 6));
                     month = parseInt(token.substring(2, 4));
                     year = parseInt(token.substring(0, 2));
-                    manageYear(olderThen100);
+                    manageYear(olderThan100);
                     fillDigits(token, 0, 1);
                     break;
                 case 12:

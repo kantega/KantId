@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.Locale;
 
 import static java.lang.Character.getNumericValue;
+import static java.lang.Integer.parseInt;
 import static no.kantega.id.api.Gender.FEMALE;
 import static no.kantega.id.api.Gender.MALE;
 
@@ -64,9 +65,10 @@ public class DanishIdNumber extends LocalIdNumber {
             return null;
         }
 
-        int day=Integer.valueOf(number.getIdToken().substring(0, 2));
-        int month=Integer.valueOf(number.getIdToken().substring(2, 4));
-        int shortYear=Integer.valueOf(number.getIdToken().substring(4, 6));
+        int day= parseInt(number.getIdToken().substring(0, 2));
+        int month= parseInt(number.getIdToken().substring(2, 4));
+        int shortYear= parseInt(number.getIdToken().substring(4, 6));
+
         int year = calculateYear(shortYear, getNumericValue(number.getIdToken().charAt(7)));
 
         return LocalDate.of(year, month, day);
