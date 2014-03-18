@@ -54,8 +54,8 @@ public class FinnishIdNumberTest {
 
     @Test
     public void genderIsTaken_FromGenderBit() {
-        assertThat(forId(VALID_FEMALE_ID).gender(FinnishIdNumber::gender), is(FEMALE));
-        assertThat(forId(VALID_MALE_ID).gender(FinnishIdNumber::gender), is(MALE));
+        assertThat(forId(VALID_FEMALE_ID).gender(FinnishIdNumber::gender).get(), is(FEMALE));
+        assertThat(forId(VALID_MALE_ID).gender(FinnishIdNumber::gender).get(), is(MALE));
     }
 
     @Test
