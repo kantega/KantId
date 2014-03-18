@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static java.lang.Integer.valueOf;
+import static java.lang.Integer.parseInt;
 import static java.util.Optional.empty;
 import static java.util.regex.Pattern.compile;
 import static no.kantega.id.api.Gender.FEMALE;
@@ -93,17 +93,17 @@ public class FinnishIdNumber extends LocalIdNumber {
     }
 
     private boolean hasValidControl(Matcher idFormat) {
-        int controlNumber = valueOf(idFormat.group(DAY) + idFormat.group(MONTH) +
-                                    idFormat.group(YEAR) + idFormat.group(CONTROL_NUMBER));
+        int controlNumber = parseInt(idFormat.group(DAY) + idFormat.group(MONTH) +
+                                     idFormat.group(YEAR) + idFormat.group(CONTROL_NUMBER));
         return idFormat.group(CONTROL_CHAR).charAt(0) == CONTROL_CHARS[controlNumber % DIVIDER];
     }
 
     private Optional<LocalDate> birthdayFor(Matcher format) {
         try {
             return Optional.of(
-                LocalDate.of(centuryFrom(format.group(SEPARATOR).charAt(0)) + valueOf(format.group(YEAR)),
-                    valueOf(format.group(MONTH)),
-                    valueOf(format.group(DAY))));
+                LocalDate.of(centuryFrom(format.group(SEPARATOR).charAt(0)) + parseInt(format.group(YEAR)),
+                    parseInt(format.group(MONTH)),
+                    parseInt(format.group(DAY))));
         } catch (DateTimeException e) {
             return Optional.empty();
         }
