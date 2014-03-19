@@ -59,6 +59,10 @@ public class FinnishIdNumberTest {
     }
 
     @Test
+    public void invalidFormat_GivesEmptyGender() {
+        assertThat(forId("270274-XXXN").gender(FinnishIdNumber::gender), is(empty()));
+    }
+    @Test
     public void birthDayIs_TakenFromSixFirstChars() {
         Optional<LocalDate> birthday = forId(VALID_FEMALE_ID).birthday(FinnishIdNumber::birthday);
         assertThat(birthday.get().getDayOfMonth(), is(27));

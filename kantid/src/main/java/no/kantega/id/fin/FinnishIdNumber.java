@@ -4,6 +4,7 @@ import no.kantega.id.api.Gender;
 import no.kantega.id.api.IdNumber;
 import no.kantega.id.api.LocalIdNumber;
 
+import java.lang.IllegalArgumentException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Locale;
@@ -11,12 +12,16 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.lang.Character.isDigit;
 import static java.lang.Integer.parseInt;
 import static java.util.Optional.empty;
 import static java.util.regex.Pattern.compile;
 import static no.kantega.id.api.Gender.FEMALE;
 import static no.kantega.id.api.Gender.MALE;
 
+/**
+ * Presentation of id number in Finland.
+ */
 public class FinnishIdNumber extends LocalIdNumber {
 
     private static final int GENDER_BIT = 7;
@@ -56,21 +61,59 @@ public class FinnishIdNumber extends LocalIdNumber {
         super(idToken, locale);
     }
 
+    /**
+     * Provide an instance of IdNumber with Finnish locale (country Finland)
+     * and implementation for methods of {@link IdNumber}.
+     *
+     * @param idToken of idNumber.
+     * @return instance of FinnishIdNumber with locale set to "fi_FI".
+     */
     public static FinnishIdNumber forId(String idToken) {
         return new FinnishIdNumber(idToken);
     }
 
 
+    /**
+     * Provide an instance of IdNumber with given locale (country Finland is only supported)
+     * and implementation for methods of {@link IdNumber}.
+     *
+     * @param idToken of idNumber.
+     * @param locale for idNumber, must be supported.
+     * @return instance of FinnishIdNumber.
+     * @throws IllegalArgumentException if locale is not supported. This class supports
+     * only locales with country set as Finland.
+     */
     public static FinnishIdNumber forId(String idToken, Locale locale) {
         return new FinnishIdNumber(idToken, locale);
     }
 
+    /**
+     * Extracts the optional gender from the given person number follwing the
+     * specification for the finnish person Number.
+     * Note that this method doesn't check the validity of the idNumber, it merely
+     * extracts gender bit of idNumber and interprets it.
+     *
+     * @param idNumber where gender is taken from.
+     * @return Optional gender (male or female), or empty in case of non-digit gender bit.
+     */
     public static Optional<Gender> gender(IdNumber idNumber) {
-        return forId(idNumber.getIdToken()).genderBitOf(idNumber) % 2 == 0
-            ? Optional.of(FEMALE)
-            : Optional.of(MALE);
+        char genderBit = idNumber.getIdToken().charAt(GENDER_BIT);
+        if (isDigit(genderBit)) {
+            return genderBit % 2 == 0 ? Optional.of(FEMALE) : Optional.of(MALE);
+        }
+        return empty();
     }
 
+    /**
+     * Standard implementation of validity check for Finnish idNumbers.
+     * Valid id number is expected to follow format: ddMMyy[-|+|A]DDDX
+     * where 6 first characters present birthday, followed by +, -, or A
+     * presenting century (1800, 1900 or 2000), followed by 3-digit running number
+     * and control character.
+     *
+     * @param idNumber The idNumber to validate.
+     * @return true when valid id number, based on a given specification for Finland.
+     */
     public static boolean valid(final IdNumber idNumber) {
         FinnishIdNumber finnishIdNumber = forId(idNumber.getIdToken());
         Matcher format = IDNUMBER_PATTERN.matcher(finnishIdNumber.getIdToken());
@@ -79,6 +122,14 @@ public class FinnishIdNumber extends LocalIdNumber {
                && finnishIdNumber.hasValidControl(format);
     }
 
+    /**
+     * Calculates optional birthday for the given id number. Calculation is based on
+     * 6 first characters presenting birthdate in format (ddMMyy) and 7.
+     * character presenting century.
+     *
+     * @param idNumber where birthday is calculated from.
+     * @return optional birthdate, or empty in case of invalid format.
+     */
     public static Optional<LocalDate> birthday(final IdNumber idNumber) {
         final Matcher format = IDNUMBER_PATTERN.matcher(idNumber.getIdToken());
         if (format.matches()) {
@@ -86,10 +137,6 @@ public class FinnishIdNumber extends LocalIdNumber {
         }
         return empty();
 
-    }
-
-    private int genderBitOf(IdNumber idNumber) {
-        return (int) idNumber.getIdToken().charAt(GENDER_BIT);
     }
 
     private boolean hasValidControl(Matcher idFormat) {

@@ -11,6 +11,11 @@ import static java.time.Period.ZERO;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.trim;
 
+/**
+ * Base class for implementations of id number. This class acts merely as
+ * a common type for id numbers and dispatcher for implementations of
+ * different id numbers.
+ */
 public class IdNumber {
 
     protected final String idToken;
@@ -22,8 +27,8 @@ public class IdNumber {
         this.idToken = trim(idToken);
     }
 
-    public static IdNumber forId(String idNumber) {
-        return new IdNumber(idNumber);
+    public static IdNumber forId(String idToken) {
+        return new IdNumber(idToken);
     }
 
     public String getIdToken() {

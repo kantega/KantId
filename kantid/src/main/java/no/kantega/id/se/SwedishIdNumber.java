@@ -100,7 +100,7 @@ public class SwedishIdNumber extends LocalIdNumber {
      * specification for the swedish person Number
      *
      * @param idNumber The IdNumber to consider
-     * @return The gender associated to the given idNumber. Returns
+     * @return The optional gender associated to the given idNumber or empty optional.
      * Optional.empty() in case it is not possible to calculate the Date
      */
     public static Optional<Gender> gender(IdNumber idNumber) {
