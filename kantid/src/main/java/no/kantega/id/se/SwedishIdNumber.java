@@ -29,7 +29,7 @@ import static no.kantega.id.api.Gender.MALE;
  * 2) yyMMddpppc
  * 3) yyyyMMddpppc
  *
- * where ppp is for the gender/location part and c is teh control number.
+ * where ppp is for the gender/location part and c is the control number.
  *
  * Support is also provided for the "samordningsnummer" in all 3 variations.
  * </pre>
