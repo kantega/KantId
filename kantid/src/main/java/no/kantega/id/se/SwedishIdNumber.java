@@ -4,10 +4,12 @@ import no.kantega.id.api.Gender;
 import no.kantega.id.api.IdNumber;
 import no.kantega.id.api.LocalIdNumber;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Locale;
 import java.util.Optional;
 
+import static java.lang.Character.getNumericValue;
 import static java.lang.Integer.parseInt;
 import static java.time.LocalDate.now;
 import static java.time.temporal.ChronoField.DAY_OF_MONTH;
@@ -17,11 +19,28 @@ import static java.util.Optional.empty;
 import static no.kantega.id.api.Gender.FEMALE;
 import static no.kantega.id.api.Gender.MALE;
 
+/**
+ *
+ * Provides utility methods for the swedish Id number.
+ * If follows the specification given by <a href="http://sv.wikipedia.org/wiki/Personnummer_i_Sverige">Wikipedia</a>
+ *
+ * It supports id numbers provided in the following formats:
+ * 1) yyMMdd-pppc
+ * 2) yyMMddpppc
+ * 3) yyyyMMddpppc
+ *
+ * where ppp is for the gender/location part and c is teh control number.
+ *
+ * Support is also provided for the "samordningsnummer" in all 3 variations.
+ *
+ */
 public class SwedishIdNumber extends LocalIdNumber {
 
     public static final String SE_COUNTRY = "SE";
 
     public static final Locale SWEDEN = new Locale("se", SE_COUNTRY);
+
+    public static final String VALID_FORMT_SE = "(\\d{6}|\\d{8})(\\+|\\-?)(\\d{4})";
 
     public SwedishIdNumber(String idToken, Locale locale) {
         super(idToken, locale);
@@ -69,17 +88,20 @@ public class SwedishIdNumber extends LocalIdNumber {
      */
     public static boolean valid(IdNumber idNumber) {
         String id = idNumber.getIdToken();
-        boolean matches = id.matches("(\\d{6}||\\d{8})(\\+\\-?)(\\d{4})");
-        return matches && new Interpreter(id).checkControl();
+        if (id.matches(VALID_FORMT_SE)) {
+            Interpreter interpreter = new Interpreter(id);
+            return interpreter.checkControl() && interpreter.validateDate();
+        }
+        return false;
     }
 
-
     /**
-     * Extracts the gender from the given person number follwing the
+     * Extracts the gender from the given person number following the
      * specification for the swedish person Number
      *
      * @param idNumber The IdNumber to consider
      * @return The optional gender associated to the given idNumber or empty optional.
+     * Optional.empty() in case it is not possible to calculate the Date
      */
     public static Optional<Gender> gender(IdNumber idNumber) {
         try {
@@ -136,7 +158,7 @@ public class SwedishIdNumber extends LocalIdNumber {
                     fillDigits(token, 0, 0);
                     break;
             }
-            day = manageSamordningsNumber(day);
+            day = manageCoordinationNumber(day);
         }
 
         LocalDate generateBday() {
@@ -147,12 +169,22 @@ public class SwedishIdNumber extends LocalIdNumber {
             return personal % 2 == 0 ? FEMALE : MALE;
         }
 
+        boolean validateDate() {
+            try {
+                generateBday();
+            } catch (DateTimeException dte) {
+                return false;
+            }
+            return true;
+        }
+
         boolean checkControl() {
             int sum = 0;
             for (int i = 0; i < digits.length; i++) {
-                sum += digits[i] * (((i + 1) % 2) + 1);
+                int product = digits[i] * (((i + 1) % 2) + 1);
+                sum += product % 10 + product / 10;
             }
-            return control == sum % 10;
+            return control == (10 - (sum % 10)) % 10;
         }
 
         private void manageYear(boolean olderThen100) {
@@ -186,13 +218,13 @@ public class SwedishIdNumber extends LocalIdNumber {
             year += now().get(YEAR) - actulYearModulo100 - 100;
         }
 
-        private int manageSamordningsNumber(int dayOfBirth) {
+        private int manageCoordinationNumber(int dayOfBirth) {
             return dayOfBirth > 31 ? dayOfBirth - 60 : dayOfBirth;
         }
 
         private void fillDigits(String id, int start1, int start2) {
             for (int i = 0; i < digits.length; i++) {
-                digits[i] = i < 6 ? id.charAt(start1 + i) : id.charAt(start2 + i);
+                digits[i] = getNumericValue(i < 6 ? id.charAt(start1 + i) : id.charAt(start2 + i));
             }
         }
     }
