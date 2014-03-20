@@ -6,18 +6,85 @@ import no.kantega.id.api.LocalIdNumber;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.Locale;
+import java.util.Optional;
 
-import static java.time.LocalDate.now;
-
+/**
+ * Representation of a <i>fødelsnummer</i> which is issued by the Norwegian skatteetaten</i>. A fødselsnummer</i> contains of
+ * 11 digits where the first six digits mark the birthday in the <i>DDMMYY</i> format containing the last two digits of the
+ * birth year. The following five numbers are also known as the <i>personnummer</i> which differentiates between individuals.
+ * The last two digits of the <i>personnummer</i> are control numbers, specified by
+ * <ol>
+ * <li>{@code k1 = 11 - ((3 * d1 + 7 * d2 + 6 * m1 + 1 * m2 + 8 * y1 + 9 * y2 + 4 * p1 + 5 * p2 + 2 * p3) % 11)}</li>
+ * <li>{@code k2 = 11 - ((5 * d1 + 4 * d2 + 3 * m1 + 2 * m2 + 7 * y1 + 6 * y2 + 5 * p1 + 4 * p2 + 3 * p3 + 2 * k1) % 11)}</li>
+ * </ol>
+ * with {@code kn} representing the {@code n}-th control number and {@code d}, {@code m}, {@code y}, {@code p} equally presenting
+ * the day, month or year of birth as given by the <i>fødselsnummer</i> and {@code p} meaning a digit of the <i>personnummer</i>.
+ * <p>
+ * The third digit of the <i>personnummer</i> gives information about the gender of a person with even digits for female and
+ * odd digits for male persons. The exact birth year can be deducted from the known last two digits together with the <i>personnummer</i>
+ * where the first three digits of the <i>personnummer</i> determines:
+ * <ol>
+ * <li>000 - 499: A person is born in the 1900.</li>
+ * <li>500 - 749: A person is born between 1854 - 1899.</li>
+ * <li>500 - 999: A person is born between 2000 - 2039.</li>
+ * <li>900 - 999: A person is born between 1940 - 1999.</li>
+ * </ol>
+ * <p>
+ * Note that a Norwegian ID number's validity is dependant of the type as defined by {@link no.kantega.id.no.NorwegianIdNumber.Type}.
+ *
+ * @see no.kantega.id.no.NorwegianIdNumber.Type
+ * @see no.kantega.id.api.IdNumber
+ */
 public class NorwegianIdNumber extends LocalIdNumber {
 
+    /**
+     * Describes the type of the given Norwegian ID.
+     */
     public static enum Type {
-        FNUMBER,
-        DNUMBER,
-        FHNUMBER,
-        HNUMBER
+        /**
+         * A F-number represents a normal ID as assigned to each Norwegian citizen and to people living in Norway on
+         * a long-term basis.
+         */
+        FNUMBER(true),
+
+        /**
+         * A D-number is assigned to people that are living in Norway on a short term basis. Compared to F-numbers,
+         * the number 4 is added to the first digit in order to differentiate D-numbers.
+         */
+        DNUMBER(true),
+
+        /**
+         * H-numbers are assigned to persons that are neither assigned a F-number or a D-number. They are marked by
+         * adding the number 4 to the third digit in order to differentiate H-numbers.
+         */
+        HNUMBER(true),
+
+        /**
+         * FH-numbers are assigned in medical context where the numbers cannot be interpreted besides their validity.
+         * They are marked by an 8 or 9 as their first digit.
+         */
+        FHNUMBER(false);
+
+        private final boolean verbose;
+
+        private Type(boolean verbose) {
+            this.verbose = verbose;
+        }
+
+        /**
+         * Determines if this type of ID number is verbose, i.e. contains information on birthday and gender.
+         *
+         * @return {@code true} if this type is verbose.
+         */
+        public boolean isVerbose() {
+            return verbose;
+        }
+
+        @Override
+        public String toString() {
+            return "NorwegianIdNumber.Type." + this.name();
+        }
     }
 
     private interface Interpreted {
@@ -31,19 +98,48 @@ public class NorwegianIdNumber extends LocalIdNumber {
             }
 
             @Override
-            public Gender getGender() {
-                return Gender.UNKNOWN;
+            public Optional<Gender> getGender() {
+                return Optional.empty();
             }
 
             @Override
-            public Type getType() {
-                throw new IllegalStateException("Cannot determine type");
+            public Optional<Type> getType() {
+                return Optional.empty();
             }
 
 
             @Override
-            public LocalDate getBirthday() {
-                throw new IllegalStateException("Birthday is not known");
+            public Optional<LocalDate> getBirthday() {
+                return Optional.empty();
+            }
+        }
+
+        class Anonymous implements Interpreted {
+
+            private final boolean valid;
+
+            public Anonymous(boolean valid) {
+                this.valid = valid;
+            }
+
+            @Override
+            public boolean isValid() {
+                return valid;
+            }
+
+            @Override
+            public Optional<Gender> getGender() {
+                return Optional.empty();
+            }
+
+            @Override
+            public Optional<Type> getType() {
+                return Optional.of(Type.FHNUMBER);
+            }
+
+            @Override
+            public Optional<LocalDate> getBirthday() {
+                return Optional.empty();
             }
         }
 
@@ -67,28 +163,28 @@ public class NorwegianIdNumber extends LocalIdNumber {
             }
 
             @Override
-            public Type getType() {
-                return type;
+            public Optional<Type> getType() {
+                return Optional.of(type);
             }
 
             @Override
-            public Gender getGender() {
-                return gender;
+            public Optional<Gender> getGender() {
+                return Optional.of(gender);
             }
 
             @Override
-            public LocalDate getBirthday() {
-                return birthday;
+            public Optional<LocalDate> getBirthday() {
+                return Optional.of(birthday);
             }
         }
 
         boolean isValid();
 
-        Gender getGender();
+        Optional<Gender> getGender();
 
-        Type getType();
+        Optional<Type> getType();
 
-        LocalDate getBirthday();
+        Optional<LocalDate> getBirthday();
     }
 
     private static Interpreted parse(String id) {
@@ -125,15 +221,14 @@ public class NorwegianIdNumber extends LocalIdNumber {
         int year = Integer.valueOf(id.substring(4, 6));
 
         Type type;
-        if (day > 40) {
+        if (day > 80) {
+            return new Interpreted.Anonymous(validChecksum);
+        } else if (day > 40) {
             day -= 40;
             type = Type.DNUMBER;
-        } else if (month > 30) {
-            month -= 30;
+        } else if (month > 40) {
+            month -= 40;
             type = Type.HNUMBER;
-        } else if (day > 80) {
-            day -= 80;
-            type = Type.FHNUMBER;
         } else {
             type = Type.FNUMBER;
         }
@@ -157,44 +252,124 @@ public class NorwegianIdNumber extends LocalIdNumber {
         }
     }
 
-    public static final String NORWAY = "NO";
+    private static final String NORWAY = "NO";
 
     private static final Locale LOCALE_NORWAY = new Locale("no", NORWAY);
 
+    /**
+     * Creates a new Norwegian id number representation with Norwegian locale.
+     *
+     * @param idToken The id token for this id.
+     */
     public NorwegianIdNumber(String idToken) {
         super(idToken, LOCALE_NORWAY);
     }
 
+    /**
+     * Creates a new Norwegian id number representation with the given locale.
+     *
+     * @param idToken The id token for this id.
+     * @param locale  The locale of the ID.
+     */
     public NorwegianIdNumber(String idToken, Locale locale) {
         super(idToken, locale);
     }
 
+    /**
+     * Convenience constructor method for creating a Norwegian ID with Norwegian locale.
+     *
+     * @param idToken The token for this id.
+     * @return A new Norwegian ID token.
+     */
     public static NorwegianIdNumber forId(String idToken) {
         return new NorwegianIdNumber(idToken);
     }
 
+    /**
+     * Convenience constructor method for creating a Norwegian ID with the given locale.
+     *
+     * @param idToken The token for this id.
+     * @param locale  The locale of the ID.
+     * @return A new Norwegian ID token.
+     */
     public static NorwegianIdNumber forId(String idToken, Locale locale) {
         return new NorwegianIdNumber(idToken, locale);
     }
 
-    public static Gender gender(IdNumber idNumber) {
+    /**
+     * Extracts the gender of the given ID.
+     *
+     * @param idNumber The ID to be examined.
+     * @return The gender of this ID by the Norwegian ID definition, if retrievable.
+     */
+    public static Optional<Gender> gender(IdNumber idNumber) {
         return parse(idNumber.getIdToken()).getGender();
     }
 
+    /**
+     * Extracts the gender of this ID.
+     *
+     * @return The gender of this ID, if known.
+     */
+    public Optional<Gender> gender() {
+        return gender(this);
+    }
+
+    /**
+     * Checks the validity of a given ID.
+     *
+     * @param idNumber The ID to be examined.
+     * @return {@code true} if the given ID is valid by measures of the Norwegian ID definition.
+     */
     public static boolean valid(final IdNumber idNumber) {
         return parse(idNumber.getIdToken()).isValid();
     }
 
-    public static LocalDate birthday(final IdNumber idNumber) {
+    /**
+     * Checks the validity of this ID.
+     *
+     * @return {@code true} if this ID is valid by measures of the Norwegian ID definition.
+     */
+    public boolean isValid() {
+        return valid(this);
+    }
+
+    /**
+     * Extracts the birthday of the given ID.
+     *
+     * @param idNumber The ID to be examined.
+     * @return The birthday of the person this ID is assigned to by the Norwegian ID definition, if retrievable.
+     */
+    public static Optional<LocalDate> birthday(final IdNumber idNumber) {
         return parse(idNumber.getIdToken()).getBirthday();
     }
 
-    public static Period age(final IdNumber idNumber) {
-        return birthday(idNumber).until(now());
+    /**
+     * Extracts the birthday of this ID.
+     *
+     * @return The birthday of the person this ID is assigned to by the Norwegian ID definition, if retrievable.
+     */
+    public Optional<LocalDate> birthday() {
+        return birthday(this);
     }
 
-    public static Type type(final IdNumber idNumber) {
+    /**
+     * Extracts the type of the given ID.
+     *
+     * @param idNumber The ID to be examined.
+     * @return The type of the ID by the Norwegian ID definition, if retrievable.
+     */
+    public static Optional<Type> type(final IdNumber idNumber) {
         return parse(idNumber.getIdToken()).getType();
+    }
+
+    /**
+     * Extracts the type of this ID.
+     *
+     * @return The type of this ID by the Norwegian ID definition, if retrievable.
+     */
+    public Optional<Type> type() {
+        return type(this);
     }
 
     @Override
