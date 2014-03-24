@@ -66,7 +66,7 @@ public class DanishIdNumber extends LocalIdNumber {
     /**
      * Standard validity check for Danish idNumbers. This method does not perform
      * modulus validation as Danish CPR numbers issued after year 2007 do
-     * not necessarily the pass modulus test.
+     * not necessarily pass the modulus test.
      *
      * Valid id number is expected in the following format: {@code ddMMyyCxxG} where:
      * <ul>
@@ -87,7 +87,7 @@ public class DanishIdNumber extends LocalIdNumber {
 
     /**
      * Validity check for Danish idNumbers that performs modulus 11 test. Note that
-     * Danish CPR numbers issued after year 2007 do not necessarily the pass modulus
+     * Danish CPR numbers issued after year 2007 do not necessarily pass the modulus
      * test, but can still be valid.
      *
      * Valid id number is expected in the following format: {@code ddMMyyCxxG} where:
@@ -146,7 +146,7 @@ public class DanishIdNumber extends LocalIdNumber {
      * 7 first characters of the idNumber where the 7th character represents century.
      *
      * @param idNumber where birthday is calculated from.
-     * @return optional birthday, or empty in case of invalid date of format.
+     * @return optional birthday, or empty in case of invalid date or invalid idNumber format.
      */
     public static Optional<LocalDate> birthday(final IdNumber idNumber) {
         if (!validateFormat(idNumber)) {
