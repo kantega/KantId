@@ -17,6 +17,7 @@ import static java.util.stream.Collectors.toList;
 import static no.kantega.id.dk.DanishIdNumber.forId;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 
@@ -37,9 +38,8 @@ public abstract class AbstractDanishIdNumberTest {
     public void testValidity() {
         DanishIdNumber idNumber = forId(ssnInput);
         assertTrue(idNumber.isValid(DanishIdNumber::valid));
-        if (shouldValidateModulus11()) {
-            assertTrue(idNumber.isValid(DanishIdNumber::validateModulus11));
-        }
+        assertEquals(shouldValidateModulus11(), idNumber.isValid(DanishIdNumber::validateModulus11));
+
     }
 
     @Test
