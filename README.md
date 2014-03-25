@@ -50,7 +50,7 @@ forId("13020955966").gender(NorwegianIdNumber::gender)
 
 #### DOCUMENTATION
 ***
-* JavaDoc
+* [JavaDoc](http://kantega.github.io/KantId/kantid/docs/javadoc/index.html)
 * Wiki pages for [National identification numbers](http://en.wikipedia.org/wiki/National_identification_number)
 * [Norway](http://en.wikipedia.org/wiki/National_identification_number#Norway)
 * [Sweden](http://en.wikipedia.org/wiki/National_identification_number#Sweden)
