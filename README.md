@@ -19,11 +19,12 @@ For each of these countries the library provides:
 * Birthday calculation
 * Age calculation
 
-
 ```java
 forId("13020955966").isValid(NorwegianIdNumber::valid)
 forId("540629-7407").isValid(FinnishIdNumber::Valid)
 forId("13020955966").gender(NorwegianIdNumber::gender)
+forId("1406108548").birthday(DanishIdNumber::birthday)
+forId("1406108548").age(DanishIdNumber::birthday)
 ```
 
 #### REQUIREMENTS
