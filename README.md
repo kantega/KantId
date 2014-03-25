@@ -30,7 +30,7 @@ forId("13020955966").gender(NorwegianIdNumber::gender)
 ***
 - JDK 8
 
-For building
+#####_For building_
 - Gradle v. 1.9 or newer (optional, you can also just use gradlew (*nix) or gradlew.bat (win)
 
 
@@ -44,10 +44,19 @@ For building
 
 #### HOW TO EXTEND LIBRARY
 ***
+#####_By extending IdNumber_
+
+#####_By extending LocalIdNumber_
 
 #### DOCUMENTATION
 ***
-JavaDoc
+* JavaDoc
+* Wiki pages for [National identification numbers](http://en.wikipedia.org/wiki/National_identification_number)
+* [Norway](http://en.wikipedia.org/wiki/National_identification_number#Norway)
+* [Sweden](http://en.wikipedia.org/wiki/National_identification_number#Sweden)
+* [Finland](http://en.wikipedia.org/wiki/National_identification_number#Finland)
+* [Denmark](http://en.wikipedia.org/wiki/National_identification_number#Denmark)
+
 #### LICENSE
 ***
 Published under [Apache License, version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
