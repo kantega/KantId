@@ -10,7 +10,8 @@ import java.util.Locale;
 import java.util.Optional;
 
 /**
- * Representation of a <i>fødelsnummer</i> which is issued by the Norwegian skatteetaten</i>. A fødselsnummer</i> contains of
+ * Representation of a <i>f&oslash;delsnummer</i> which is issued by the Norwegian skatteetaten. A <i>f&oslash;dselsnummer</i>
+ * contains of
  * 11 digits where the first six digits mark the birthday in the <i>DDMMYY</i> format containing the last two digits of the
  * birth year. The following five numbers are also known as the <i>personnummer</i> which differentiates between individuals.
  * The last two digits of the <i>personnummer</i> are control numbers, specified by
@@ -19,7 +20,7 @@ import java.util.Optional;
  * <li>{@code k2 = 11 - ((5 * d1 + 4 * d2 + 3 * m1 + 2 * m2 + 7 * y1 + 6 * y2 + 5 * p1 + 4 * p2 + 3 * p3 + 2 * k1) % 11)}</li>
  * </ol>
  * with {@code kn} representing the {@code n}-th control number and {@code d}, {@code m}, {@code y}, {@code p} equally presenting
- * the day, month or year of birth as given by the <i>fødselsnummer</i> and {@code p} meaning a digit of the <i>personnummer</i>.
+ * the day, month or year of birth as given by the <i>f&oslash;dselsnummer</i> and {@code p} meaning a digit of the <i>personnummer</i>.
  * <p>
  * The third digit of the <i>personnummer</i> gives information about the gender of a person with even digits for female and
  * odd digits for male persons. The exact birth year can be deducted from the known last two digits together with the <i>personnummer</i>

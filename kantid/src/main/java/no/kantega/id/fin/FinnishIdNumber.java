@@ -20,7 +20,7 @@ import static no.kantega.id.api.Gender.FEMALE;
 import static no.kantega.id.api.Gender.MALE;
 
 /**
- * Presentation of id number in Finland.
+ * Representation of id number in Finland.
  */
 public class FinnishIdNumber extends LocalIdNumber {
 
@@ -107,8 +107,8 @@ public class FinnishIdNumber extends LocalIdNumber {
     /**
      * Standard implementation of validity check for Finnish idNumbers.
      * Valid id number is expected to follow format: ddMMyy[-|+|A]DDDX
-     * where 6 first characters present birthday, followed by +, -, or A
-     * presenting century (1800, 1900 or 2000), followed by 3-digit running number
+     * where 6 first characters represent birthday, followed by +, -, or A
+     * representing century (1800, 1900 or 2000), followed by 3-digit running number
      * and control character.
      *
      * @param idNumber The idNumber to validate.
@@ -124,8 +124,8 @@ public class FinnishIdNumber extends LocalIdNumber {
 
     /**
      * Calculates optional birthday for the given id number. Calculation is based on
-     * 6 first characters presenting birthdate in format (ddMMyy) and 7.
-     * character presenting century.
+     * 6 first characters representing birthdate in format (ddMMyy) and 7.
+     * character representing century.
      *
      * @param idNumber where birthday is calculated from.
      * @return optional birthdate, or empty in case of invalid format.
