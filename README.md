@@ -1,10 +1,9 @@
-KantId - extendable lightway library for Id Numbers.
-====================================================
+## KantId - extendable lightway library for Id Numbers.
 
-25.03.2014 version 0.1-SNAPSHOT
+*25.03.2014 version 0.1-SNAPSHOT*
 
-SUMMARY
-
+#### SUMMARY
+***
 
 This project provides a simple api to manage National Id Numbers.
 
@@ -20,22 +19,30 @@ For each of these countries the library provides:
 * Birthday calculation
 * Age calculation
 
-REQUIREMENTS
-
+#### REQUIREMENTS
+***
 - JDK 8
 
 For building
 - Gradle v. 1.9 or newer (optional, you can also just use gradlew (*nix) or gradlew.bat (win)
 
 
-INSTALLATION
-
+#### INSTALLATION
+***
 From repository
 
-HOW TO EXTEND LIBRARY
+#### HOW TO EXTEND LIBRARY
+***
 
-LICENSE
+#### Documentation
+***
+JavaDoc
+#### LICENSE
+***
+Published under [Apache License, version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
 
-COPYRIGHT
+#### COPYRIGHT
+***
+[Kantega AS 2014](http://www.kantega.no)
 
 
