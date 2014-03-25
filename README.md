@@ -29,11 +29,13 @@ For building
 
 
 INSTALLATION
+
 From repository
 
 HOW TO EXTEND LIBRARY
 
 LICENSE
 
+COPYRIGHT
 
 
