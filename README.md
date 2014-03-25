@@ -5,7 +5,7 @@
 #### SUMMARY
 ***
 
-This project provides a simple api to manage National Id Numbers.
+This project provides a simple api to manage National Id Numbers. We found out that the use of a functional approach to tackle the problem would result in a much lighter and flexible api, therefor we decided to use java 8
 
 At the moment there is implementation for 4 nordic countries:
 * Denmark
@@ -19,6 +19,13 @@ For each of these countries the library provides:
 * Birthday calculation
 * Age calculation
 
+
+```java
+forId("13020955966").isValid(NorwegianIdNumber::valid)
+forId("540629-7407").isValid(FinnishIdNumber::Valid)
+forId("13020955966").gender(NorwegianIdNumber::gender)
+```
+
 #### REQUIREMENTS
 ***
 - JDK 8
@@ -30,7 +37,8 @@ For building
 #### INSTALLATION
 ***
 #####_From source code_
-* Clone git repository at: 
+* Clone git repository at: https://github.com/kantega/KantId.git
+* Compile with Java 8 and Gradle: "gradle build"
 
 #####_From repository_
 
