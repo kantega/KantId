@@ -29,12 +29,15 @@ For building
 
 #### INSTALLATION
 ***
-From repository
+#####_From source code_
+* Clone git repository at: 
+
+#####_From repository_
 
 #### HOW TO EXTEND LIBRARY
 ***
 
-#### Documentation
+#### DOCUMENTATION
 ***
 JavaDoc
 #### LICENSE
