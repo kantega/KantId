@@ -18,7 +18,7 @@ import static no.kantega.id.api.Gender.FEMALE;
 import static no.kantega.id.api.Gender.MALE;
 
 /**
- * Representation of a Swedish <i>personnummer</i> which is issued by the Swedish <i>skatteverket</i>. Such a number
+ * Representation of a Swedish <i>personnummer</i> which is issued by the Swedish <i>Skatteverket</i>. Such a number
  * is represented by ten digits and a hyphen which is inserted after the first six digits that represent a person's
  * birthday. The birthday is represented in the format <i>YYMMDD</i>, where the year is only included by its last two digits.
  * The hyphen is represented by:
@@ -84,7 +84,7 @@ public class SwedishIdNumber extends LocalIdNumber {
     }
 
     /**
-     * Provide an instance of IdNumber with swedish locale and provides
+     * Provide an instance of IdNumber with Swedish locale and provides
      * implementation of all the method supported.
      *
      * @param token The idToken
@@ -95,7 +95,7 @@ public class SwedishIdNumber extends LocalIdNumber {
     }
 
     /**
-     * Provide an instance of IdNumber with swedish locale and provides
+     * Provide an instance of IdNumber with Swedish locale and provides
      * implementation of all the method supported.
      *
      * @param token  the idToken
@@ -133,8 +133,8 @@ public class SwedishIdNumber extends LocalIdNumber {
     }
 
     /**
-     * Extracts the gender from the given person number following the
-     * specification for the swedish person Number
+     * Extracts the gender from the given idNumber following the
+     * specification for the Swedish person Number
      *
      * @param idNumber The IdNumber to consider
      * @return The optional gender associated to the given idNumber or empty optional.
@@ -158,7 +158,7 @@ public class SwedishIdNumber extends LocalIdNumber {
     }
 
     /**
-     * Calculates the birth date of the given IdNumber
+     * Determines the birth date of the given IdNumber, if applicable.
      *
      * @param idNumber The IdNumber to consider
      * @return The birth date associated to the given IdNumber
@@ -172,7 +172,7 @@ public class SwedishIdNumber extends LocalIdNumber {
     }
 
     /**
-     * Determines the birth day of the person associated to this ID number, if applicable
+     * Determines the birth day of the person associated to this ID number, if applicable.
      *
      * @return The optional birth day of the person holding this ID number.
      */

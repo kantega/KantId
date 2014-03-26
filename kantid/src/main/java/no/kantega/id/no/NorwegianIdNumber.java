@@ -10,8 +10,8 @@ import java.util.Locale;
 import java.util.Optional;
 
 /**
- * Representation of a <i>f&oslash;delsnummer</i> which is issued by the Norwegian skatteetaten. A <i>f&oslash;dselsnummer</i>
- * contains of
+ * Representation of a <i>f&oslash;delsnummer</i> which is issued by the Norwegian Skatteetaten. A <i>f&oslash;dselsnummer</i>
+ * consists of
  * 11 digits where the first six digits mark the birthday in the <i>DDMMYY</i> format containing the last two digits of the
  * birth year. The following five numbers are also known as the <i>personnummer</i> which differentiates between individuals.
  * The last two digits of the <i>personnummer</i> are control numbers, specified by
