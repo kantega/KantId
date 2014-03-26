@@ -15,6 +15,7 @@ import static no.kantega.id.fin.FinnishIdNumber.forId;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class FinnishIdNumberTest {
 
@@ -62,6 +63,31 @@ public class FinnishIdNumberTest {
     public void invalidFormat_GivesEmptyGender() {
         assertThat(forId("270274-XXXN").gender(FinnishIdNumber::gender), is(empty()));
     }
+
+    @Test
+    public void runningNumber_Between002And899_IsBornInFinland() {
+        assertTrue(forId("270288-002X").isBornInFinland());
+        assertTrue(forId("270288-899X").isBornInFinland());
+        assertTrue(forId("270288-345X").isBornInFinland());
+    }
+
+    @Test
+    public void runningNumber_001_IsNotBornInFinland() {
+        assertFalse(forId("270288-001X").isBornInFinland());
+    }
+
+    @Test
+    public void runningNumberGreater_Than899_IsNotBornInFinland() {
+        assertFalse(forId("270288-900X").isBornInFinland());
+        assertFalse(forId("270288-999X").isBornInFinland());
+    }
+
+    @Test
+    public void wronglyFormattedIdNumber_IsNotBornInFinland() {
+        assertFalse(forId("270288-1000X").isBornInFinland());
+        assertFalse(forId("270288-aaac").isBornInFinland());
+    }
+
     @Test
     public void birthDayIs_TakenFromSixFirstChars() {
         Optional<LocalDate> birthday = forId(VALID_FEMALE_ID).birthday(FinnishIdNumber::birthday);

@@ -53,6 +53,10 @@ public class FinnishIdNumber extends LocalIdNumber {
 
     private static final int DIVIDER = 31;
 
+    private static final int LOWER_LIMIT_FINNISHBORN = 2;
+
+    private static final int UPPER_LIMIT_FINNISH_BORN = 899;
+
     public FinnishIdNumber(final String idToken) {
         super(idToken, LOCALE_FI);
     }
@@ -170,4 +174,19 @@ public class FinnishIdNumber extends LocalIdNumber {
         return locale != null && FINLAND.equals(locale.getCountry());
     }
 
+    /**
+     * IdNumber's controlnumber (digits 8-10) indicates place to birth.
+     * Numbers (inclusively) in range 002-899 (larger numbers may be used in special cases) are
+     * considered as born in Finland.
+     *
+     * @return true for persons born in Finland, otherwise false.
+     */
+    public boolean isBornInFinland() {
+        final Matcher idFormat = IDNUMBER_PATTERN.matcher(getIdToken());
+        if(idFormat.matches()) {
+            int controlNumber = parseInt(idFormat.group(CONTROL_NUMBER));
+            return controlNumber >= LOWER_LIMIT_FINNISHBORN && controlNumber <= UPPER_LIMIT_FINNISH_BORN;
+        }
+        return false;
+    }
 }
