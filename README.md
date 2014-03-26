@@ -98,10 +98,10 @@ One of our main object is to encourage further API development by addition of mo
 ***
 * [JavaDoc](http://kantega.github.io/KantId/kantid/docs/javadoc/index.html)
 * Wiki pages for [National identification numbers](http://en.wikipedia.org/wiki/National_identification_number)
-* [Norway](http://en.wikipedia.org/wiki/National_identification_number#Norway)
-* [Sweden](http://en.wikipedia.org/wiki/National_identification_number#Sweden)
-* [Finland](http://en.wikipedia.org/wiki/National_identification_number#Finland)
-* [Denmark](http://en.wikipedia.org/wiki/National_identification_number#Denmark)
+  * [Norway](http://en.wikipedia.org/wiki/National_identification_number#Norway)
+  * [Sweden](http://en.wikipedia.org/wiki/National_identification_number#Sweden)
+  * [Finland](http://en.wikipedia.org/wiki/National_identification_number#Finland)
+  * [Denmark](http://en.wikipedia.org/wiki/National_identification_number#Denmark) (official [documentation](https://cpr.dk/media/167692/personnummeret%20i%20cpr.pdf))
 
 #### LICENSE
 ***
