@@ -1,4 +1,4 @@
-## KantId - extendable lightway library for Id Numbers.
+## KantId - extendable ligthweigth library for Id Numbers.
 
 *25.03.2014 version 0.1-SNAPSHOT*
 
@@ -7,7 +7,7 @@
 
 This project provides a simple api to manage National Id Numbers. We found out that the use of a functional approach to tackle the problem would result in a much lighter and flexible api, therefor we decided to use java 8
 
-At the moment there is implementation for 4 nordic countries:
+At the moment there is an implementation for 4 nordic countries:
 * Denmark
 * Finland
 * Norway
@@ -19,12 +19,23 @@ For each of these countries the library provides:
 * Birthday calculation
 * Age calculation
 
+#### USAGE
+#####_Get an instance either from constructor or factory:_
+```java
+forId("13020955966");
+new NorwegianIdNumber("13020955966");
+new NorwegianIdNumber("13020955966", LOCALE_NOR);
+```
+#####_Use methods of selected implementation, and instance:_
 ```java
 forId("13020955966").isValid(NorwegianIdNumber::valid)
 forId("540629-7407").isValid(FinnishIdNumber::Valid)
-forId("13020955966").gender(NorwegianIdNumber::gender)
+
+forId("13020955966", LOCALE_NOR).gender(NorwegianIdNumber::gender)
+swedishIdNumber.gender(SwedishIdNumber::gender)
+
 forId("1406108548").birthday(DanishIdNumber::birthday)
-forId("1406108548").age(DanishIdNumber::birthday)
+danishIdNumber.age(DanishIdNumber::birthday)
 ```
 
 #### REQUIREMENTS
