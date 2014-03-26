@@ -1,4 +1,4 @@
-## KantId - extendable ligthweigth library for Id Numbers.
+## KantId - extendable lightweight library for Id Numbers.
 
 *25.03.2014 version 0.1-SNAPSHOT*
 
@@ -57,8 +57,14 @@ danishIdNumber.age(DanishIdNumber::birthday)
 #### HOW TO EXTEND LIBRARY
 ***
 #####_By extending IdNumber_
+* Create a class with a proper constructor or factory method for new instances.
+* Implement methods you want to use with your class, this doesn't mean that you 
+  have to override methods! Just implement needed functionality.
+* See usage patterns above, use your class via static methods or instance methods.
 
 #####_By extending LocalIdNumber_
+* Override _supports(Locale locale)_ method in no.kantega.id.api.LocalIdNumber to support your locale(s).
+
 
 #### DOCUMENTATION
 ***
