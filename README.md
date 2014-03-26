@@ -58,12 +58,39 @@ danishIdNumber.age(DanishIdNumber::birthday)
 ***
 #####_By extending IdNumber_
 * Create a class with a proper constructor or factory method for new instances.
+ ```java
+    public MyIdNumber(final String idToken) {
+        super(idToken);
+    }
+    public static MyIdNumber forId(String idToken) {
+        return new MyIdNumber(idToken);
+    }
+
+ ```
 * Implement methods you want to use with your class, this doesn't mean that you 
-  have to override methods! Just implement needed functionality.
+  have to override methods! __*Just implement needed functionality.*__ Use optionally static methods
+  for more fluent usage pattern.
+```java
+    public static Optional<Gender> gender(IdNumber idNumber) {
+        char genderBit = idNumber.getIdToken().charAt(GENDER_BIT);
+        if (isDigit(genderBit)) {
+            return genderBit % 2 == 0 ? Optional.of(FEMALE) : Optional.of(MALE);
+        }
+        return empty();
+    }
+
+```
 * See usage patterns above, use your class via static methods or instance methods.
 
 #####_By extending LocalIdNumber_
 * Override _supports(Locale locale)_ method in no.kantega.id.api.LocalIdNumber to support your locale(s).
+```java
+    @Override
+    protected boolean supports(Locale locale) {
+        return locale != null && MY_COUNTRY.equals(locale.getCountry());
+    }
+
+```
 
 
 #### DOCUMENTATION
