@@ -12,40 +12,68 @@ import java.util.Optional;
 import static java.lang.Character.getNumericValue;
 import static java.lang.Integer.parseInt;
 import static java.time.LocalDate.now;
-import static java.time.temporal.ChronoField.DAY_OF_MONTH;
-import static java.time.temporal.ChronoField.MONTH_OF_YEAR;
-import static java.time.temporal.ChronoField.YEAR;
+import static java.time.temporal.ChronoField.*;
 import static java.util.Optional.empty;
 import static no.kantega.id.api.Gender.FEMALE;
 import static no.kantega.id.api.Gender.MALE;
 
 /**
- * <pre>
- * Provides utility methods for the swedish Id number.
- * If follows the specification given by <a href="http://sv.wikipedia.org/wiki/Personnummer_i_Sverige">Wikipedia</a>
- *
- * It supports id numbers provided in the following formats:
- * 1) yyMMdd-pppc
- * 2) yyMMddpppc
- * 3) yyyyMMddpppc
- *
- * where ppp is for the gender/location part and c is the control number.
- *
- * Support is also provided for the "samordningsnummer" in all 3 variations.
- * </pre>
+ * Representation of a Swedish <i>personnummer</i> which is issued by the Swedish <i>skatteverket</i>. Such a number
+ * is represented by ten digits and a hyphen which is inserted after the first six digits that represent a person's
+ * birthday. The birthday is represented in the format <i>YYMMDD</i>, where the year is only included by its last two digits.
+ * The hyphen is represented by:
+ * <ol>
+ * <li>A {@code -} sign: For people under the age of 100</li>
+ * <li>A {@code ß} sign: For people that have reached the age of 100</li>
+ * </ol>
+ * In order to avoid a change of the ID number by reaching a certain age, some authorities use 12 digit numbers instead
+ * which represent the birthday in the format <i>YYYYMMDD</i> without using a hyphen. Both formats are understood
+ * by this implementation.
+ * <p>
+ * The remaining digits of the <i>personnummer</i> can interpreted differently:
+ * <ol>
+ * <li>Up to 1990 the seventh and eight digit represented the country of birth of a person or alternatively the
+ * country of residence, if a person was born before 1947.</li>
+ * <li>The ninth digit represents a person's gender with even numbers being reserved for females and odd numbers for
+ * males.</li>
+ * <li>After 1967, the tenth digit was used to represent a checksum. Before this year, the Swedish <i>personnummer</i>
+ * consisted of only 9 digits. The latter representation is not understood by this implementation.</li>
+ * </ol>
+ * The rule for computing a check sum to a <i>personnummer</i> is documented on for example
+ * <a href="http://en.wikipedia.org/wiki/Personal_identity_number_%28Sweden%29">Wikipedia</a>.
  */
 public class SwedishIdNumber extends LocalIdNumber {
 
+    /**
+     * A default country token for Sweden.
+     */
     public static final String SE_COUNTRY = "SE";
 
+    /**
+     * A default Swedish locale.
+     */
     public static final Locale SWEDEN = new Locale("se", SE_COUNTRY);
 
-    public static final String VALID_FORMT_SE = "(\\d{6}|\\d{8})(\\+|\\-?)(\\d{4})";
+    /**
+     * A regular expression for checking if a number is in the format of a Swedish ID number.
+     */
+    public static final String VALID_FORMAT_SE = "(\\d{6}|\\d{8})(\\+|\\-?)(\\d{4})";
 
+    /**
+     * Creates a new Swedish ID with the given locale.
+     *
+     * @param idToken The ID token to represent.
+     * @param locale  The Locale for the current instance of SwedishIdNumber
+     */
     public SwedishIdNumber(String idToken, Locale locale) {
         super(idToken, locale);
     }
 
+    /**
+     * Creates a Swedish ID with default locale.
+     *
+     * @param idToken The ID token to represent.
+     */
     public SwedishIdNumber(String idToken) {
         super(idToken, SWEDEN);
     }
@@ -70,7 +98,7 @@ public class SwedishIdNumber extends LocalIdNumber {
      * Provide an instance of IdNumber with swedish locale and provides
      * implementation of all the method supported.
      *
-     * @param token the idToken
+     * @param token  the idToken
      * @param locale The Locale for the current instance of SwedishIdNumber
      * @return An instance of SwedishIdNumber for the provided locale
      */
@@ -88,11 +116,20 @@ public class SwedishIdNumber extends LocalIdNumber {
      */
     public static boolean valid(IdNumber idNumber) {
         String id = idNumber.getIdToken();
-        if (id.matches(VALID_FORMT_SE)) {
+        if (id.matches(VALID_FORMAT_SE)) {
             Interpreter interpreter = new Interpreter(id);
             return interpreter.checkControl() && interpreter.validateDate();
         }
         return false;
+    }
+
+    /**
+     * Checks if the given instance represents a valid Swedish ID number.
+     *
+     * @return {@code true} if this instance represents a valid Swedish ID number.
+     */
+    public boolean isValid() {
+        return valid(this);
     }
 
     /**
@@ -112,10 +149,19 @@ public class SwedishIdNumber extends LocalIdNumber {
     }
 
     /**
-     * Calculates the birthday date of the given IdNumber
+     * Determines the gender of the person that holds this ID number, if applicable.
+     *
+     * @return The optional gender of the person holding this ID number.
+     */
+    public Optional<Gender> gender() {
+        return gender(this);
+    }
+
+    /**
+     * Calculates the birth date of the given IdNumber
      *
      * @param idNumber The IdNumber to consider
-     * @return The birthday date associated to the given IdNumber
+     * @return The birth date associated to the given IdNumber
      */
     public static Optional<LocalDate> birthday(IdNumber idNumber) {
         try {
@@ -123,6 +169,15 @@ public class SwedishIdNumber extends LocalIdNumber {
         } catch (NumberFormatException nfe) {
             return empty();
         }
+    }
+
+    /**
+     * Determines the birth day of the person associated to this ID number, if applicable
+     *
+     * @return The optional birth day of the person holding this ID number.
+     */
+    public Optional<LocalDate> birthday() {
+        return birthday(this);
     }
 
     private static class Interpreter {
