@@ -21,6 +21,11 @@ import static no.kantega.id.api.Gender.MALE;
 
 /**
  * Representation of ID number in Finland.
+ * Valid idNumber in Finland is expected to follow format: ddMMyy[-|+|A]DDDX
+ * where 6 first characters represent birthday, followed by +, -, or A
+ * representing century (1800, 1900 or 2000), followed by 3-digit running number
+ * and control character.
+
  */
 public class FinnishIdNumber extends LocalIdNumber {
 
