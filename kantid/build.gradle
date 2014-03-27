@@ -1,6 +1,19 @@
-apply plugin: 'java'
+buildscript {
+    repositories {
+        jcenter()
+    }
 
-sourceCompatibility = 1.8
+    dependencies {
+        classpath group: 'org.gradle.api.plugins', name: 'gradle-nexus-plugin', version: '0.7'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'nexus'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
 version = '0.1-SNAPSHOT'
 
 repositories {
@@ -12,6 +25,53 @@ jar {
         attributes 'Implementation-Title': 'KantId-java8', 'Implementation-Version': version
     }
 }
+
+modifyPom {
+    project {
+        name 'KantId'
+        description 'An extendable lightweight library for ID numbers.'
+        url 'https://github.com/kantega/kantid'
+        inceptionYear '2014'
+
+        scm {
+            url 'https://github.com/kantega/kantid'
+            connection 'scm:https://kantega@github.com/kantega/kantid.git'
+            developerConnection 'scm:git://github.com/kantega/kantid.git'
+        }
+
+        licenses {
+            license {
+                name 'The Apache Software License, Version 2.0'
+                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
+
+        developers {
+            developer {
+                id 'smartoma'
+                name 'Simo Martomaa'
+                email 'simo.martomaa@kantega.no'
+            }
+            developer {
+                id 'clabar'
+                name 'Claudio Bartoli'
+                email 'claudio.bartoli@kantega.no'
+            }
+            developer {
+                id 'qtips'
+                name 'Qadeer Ahmad'
+                email 'qadeer.ahmad@kantega.no'
+            }
+            developer {
+                id 'raphw'
+                name 'Rafael Winterhalter'
+                email 'rafael.winterhalter@kantega.no'
+            }
+        }
+    }
+}
+
 dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.2.1'
     testCompile group: 'junit', name: 'junit', version: '4.11'
