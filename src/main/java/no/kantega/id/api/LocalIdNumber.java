@@ -3,7 +3,7 @@ package no.kantega.id.api;
 import java.util.Locale;
 
 /**
- * Base class for id numbers supporting locale.
+ * Base class for ID numbers supporting locale.
  */
 public class LocalIdNumber extends IdNumber {
 

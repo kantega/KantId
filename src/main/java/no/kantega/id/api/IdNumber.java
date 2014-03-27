@@ -75,7 +75,7 @@ public class IdNumber {
     }
 
     /**
-     * Retrieves the gender of the person holding this ID number as it is defined for a given
+     * Retrieves the birth day of the person holding this ID number as it is defined for a given
      * birth day assertion.
      *
      * @param birthDayFunction An implementation of an ID number's birth day assertion.

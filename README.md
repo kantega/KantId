@@ -5,13 +5,13 @@
 #### SUMMARY
 ***
 
-This project provides a simple api to manage National Id Numbers. We found out that the use of a functional approach to tackle the problem would result in a much lighter and flexible api, therefor we decided to use java 8
+This project provides a simple API to manage National Id numbers. The API uses the Java 8 functional programming paradigm which results in a much lighter, flexible and extensible API.
 
 At the moment there is an implementation for 4 nordic countries:
-* Denmark
-* Finland
-* Norway
-* Sweden
+* [Denmark](http://kantega.github.io/KantId/kantid/docs/javadoc/no/kantega/id/dk/DanishIdNumber.html)
+* [Finland](http://kantega.github.io/KantId/kantid/docs/javadoc/no/kantega/id/fin/FinnishIdNumber.html)
+* [Norway](http://kantega.github.io/KantId/kantid/docs/javadoc/no/kantega/id/no/NorwegianIdNumber.html)
+* [Sweden](http://kantega.github.io/KantId/kantid/docs/javadoc/no/kantega/id/se/SwedishIdNumber.html)
 
 For each of these countries the library provides:
 * Validation
@@ -56,7 +56,8 @@ danishIdNumber.age(DanishIdNumber::birthday)
 
 #### HOW TO EXTEND LIBRARY
 ***
-#####_By extending IdNumber_
+One of our main object is to encourage further API development by addition of more countries or functionality. We have attempted to make the API easy to extend by leveraging the Java 8 functional paradigm. Here follows two ways to extend the API:
+#####_By extending IdNumber class_
 * Create a class with a proper constructor or factory method for new instances.
  ```java
     public MyIdNumber(final String idToken) {
@@ -97,10 +98,10 @@ danishIdNumber.age(DanishIdNumber::birthday)
 ***
 * [JavaDoc](http://kantega.github.io/KantId/kantid/docs/javadoc/index.html)
 * Wiki pages for [National identification numbers](http://en.wikipedia.org/wiki/National_identification_number)
-* [Norway](http://en.wikipedia.org/wiki/National_identification_number#Norway)
-* [Sweden](http://en.wikipedia.org/wiki/National_identification_number#Sweden)
-* [Finland](http://en.wikipedia.org/wiki/National_identification_number#Finland)
-* [Denmark](http://en.wikipedia.org/wiki/National_identification_number#Denmark)
+  * [Norway](http://en.wikipedia.org/wiki/National_identification_number#Norway)
+  * [Sweden](http://en.wikipedia.org/wiki/National_identification_number#Sweden)
+  * [Finland](http://en.wikipedia.org/wiki/National_identification_number#Finland)
+  * [Denmark](http://en.wikipedia.org/wiki/National_identification_number#Denmark) (official [documentation](https://cpr.dk/media/167692/personnummeret%20i%20cpr.pdf))
 
 #### LICENSE
 ***
