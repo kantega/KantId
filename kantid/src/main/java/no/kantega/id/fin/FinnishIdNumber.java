@@ -20,7 +20,7 @@ import static no.kantega.id.api.Gender.FEMALE;
 import static no.kantega.id.api.Gender.MALE;
 
 /**
- * Representation of id number in Finland.
+ * Representation of ID number in Finland.
  */
 public class FinnishIdNumber extends LocalIdNumber {
 
@@ -62,7 +62,7 @@ public class FinnishIdNumber extends LocalIdNumber {
     }
 
     /**
-     * Provide an instance of IdNumber with Finnish locale (country Finland)
+     * Provides an instance of IdNumber with Finnish locale (country Finland)
      * and implementation for methods of {@link IdNumber}.
      *
      * @param idToken of idNumber.
@@ -74,7 +74,7 @@ public class FinnishIdNumber extends LocalIdNumber {
 
 
     /**
-     * Provide an instance of IdNumber with given locale (country Finland is only supported)
+     * Provide an instance of IdNumber with given locale (only Finland is supported)
      * and implementation for methods of {@link IdNumber}.
      *
      * @param idToken of idNumber.
@@ -88,10 +88,10 @@ public class FinnishIdNumber extends LocalIdNumber {
     }
 
     /**
-     * Extracts the optional gender from the given person number follwing the
-     * specification for the finnish person Number.
+     * Extracts the optional gender from the given IdNumber following the
+     * specification for Finnish national identity number.
      * Note that this method doesn't check the validity of the idNumber, it merely
-     * extracts gender bit of idNumber and interprets it.
+     * extracts gender part of idNumber and interprets it.
      *
      * @param idNumber where gender is taken from.
      * @return Optional gender (male or female), or empty in case of non-digit gender bit.
@@ -106,7 +106,7 @@ public class FinnishIdNumber extends LocalIdNumber {
 
     /**
      * Standard implementation of validity check for Finnish idNumbers.
-     * Valid id number is expected to follow format: ddMMyy[-|+|A]DDDX
+     * Valid idNumber is expected to follow format: ddMMyy[-|+|A]DDDX
      * where 6 first characters represent birthday, followed by +, -, or A
      * representing century (1800, 1900 or 2000), followed by 3-digit running number
      * and control character.
@@ -123,12 +123,12 @@ public class FinnishIdNumber extends LocalIdNumber {
     }
 
     /**
-     * Calculates optional birthday for the given id number. Calculation is based on
-     * 6 first characters representing birthdate in format (ddMMyy) and 7.
-     * character representing century.
+     * Calculates optional birthday for the given idNumber. Calculation is based on the 7
+     * first characters of idNumber from where the 6 first are birth date in format (ddMMyy), and the 7th
+     * character represents century.
      *
      * @param idNumber where birthday is calculated from.
-     * @return optional birthdate, or empty in case of invalid format.
+     * @return optional birth date, or empty in case of invalid format.
      */
     public static Optional<LocalDate> birthday(final IdNumber idNumber) {
         final Matcher format = IDNUMBER_PATTERN.matcher(idNumber.getIdToken());

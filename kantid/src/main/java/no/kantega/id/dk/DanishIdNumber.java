@@ -125,7 +125,7 @@ public class DanishIdNumber extends LocalIdNumber {
 
     /**
      * Extracts the optional gender from the given person number following the
-     * specification for the danish CPR number.
+     * specification for the Danish CPR number.
      * Note that this method doesn't check the validity of the idNumber, it merely
      * extracts gender bit of idNumber and interprets it.
      *
