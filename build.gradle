@@ -14,7 +14,7 @@ apply plugin: 'nexus'
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-version = '0.1-SNAPSHOT'
+version = '0.1'
 
 repositories {
     mavenCentral()
@@ -37,6 +37,7 @@ javadoc {
 
 modifyPom {
     project {
+        groupId 'no.kantega'
         name 'KantId'
         description 'An extendable lightweight library for ID numbers.'
         url 'https://github.com/kantega/kantid'
