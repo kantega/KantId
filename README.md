@@ -53,6 +53,15 @@ danishIdNumber.age(DanishIdNumber::birthday)
 * Compile with Java 8 and Gradle: "gradle build"
 
 #####_From repository_
+* _Gradle_: group: 'no.kantega', name: 'KantId', version: '0.1'
+* _Maven_:
+```xml
+<dependency>
+    <groupId>no.kantega</groupId>
+    <artifactId>KantId</artifactId>
+    <version>0.1</version>
+</dependency>
+```
 
 #### HOW TO EXTEND LIBRARY
 ***
