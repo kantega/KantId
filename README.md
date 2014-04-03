@@ -1,6 +1,6 @@
 ## KantId - extendable lightweight library for Id Numbers.
 
-*28.03.2014 version 0.1*
+*03.04.2014 version 0.2-SNAPSHOT*
 
 #### SUMMARY
 ***
