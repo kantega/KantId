@@ -44,18 +44,16 @@ public class IdNumberTest {
     @Test
     public void ageIsCalculated_FromBirthday() {
         LocalDate twoYearsAgo = now().minusYears(2);
-        LocalDate thirtyFifeYearsOneMonthSixDaysAgo = now().minusYears(35).minusMonths(1).minusDays(6);
+        LocalDate thirtyFifeYearsOneMonthAgo = now().minusYears(35).minusMonths(1);
 
         Period age = forId("123456-123K").age((idNumber) -> of(twoYearsAgo)).get();
         assertThat(age.getYears(), is(2));
         assertThat(age.getMonths(), is(0));
         assertThat(age.getDays(), is(0));
 
-        age = forId("123456-123K").age((idNumber) -> of(thirtyFifeYearsOneMonthSixDaysAgo)).get();
+        age = forId("123456-123K").age((idNumber) -> of(thirtyFifeYearsOneMonthAgo)).get();
         assertThat(age.getYears(), is(35));
         assertThat(age.getMonths(), is(1));
-        assertThat(age.getDays(), is(6));
-
     }
 
     private void assertExceptionWithInvalidArgument(Function<String, IdNumber> function, String argument) {
