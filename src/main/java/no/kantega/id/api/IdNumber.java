@@ -1,5 +1,6 @@
 package no.kantega.id.api;
 
+import java.lang.RuntimeException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Optional;
@@ -40,7 +41,7 @@ public class IdNumber {
      * @param idToken The token to represent.
      * @return The created ID number.
      */
-    public static IdNumber forId(String idToken) {
+    public static IdNumber forId(final String idToken) {
         return new IdNumber(idToken);
     }
 
@@ -65,24 +66,68 @@ public class IdNumber {
 
     /**
      * Retrieves the gender of the person holding this ID number as it is defined for a given
-     * gender assertion.
+     * gender assertion. Execution of <i>genderFunction</i> will never throw exception
+     * or return null.
      *
      * @param genderFunction An implementation of an ID number's gender assertion.
      * @return The gender represented by this ID number as valid for the given assertion logic.
      */
     public Optional<Gender> gender(final Function<IdNumber, Optional<Gender>> genderFunction) {
+        return ensureOptionalOf(genderFunction);
+    }
+
+    /**
+     *  Retrieves the gender of the person holding this ID number as it is defined for a given
+     *  gender assertion. Clients implementing <i>genderFunction</i> are encouraged to check
+     *  validity of ID number before retrieving gender from ID number, as well as throw
+     *  {@link RuntimeException} if ID number is not valid.
+     *
+     * @param genderFunction An implementation of an ID number's gender assertion.
+     * @return The gender represented by this ID number. Pay attention that this method
+     * can also return {@code null}.
+     */
+    public Gender getGender(final Function<IdNumber, Gender> genderFunction) {
         return genderFunction.apply(this);
     }
 
     /**
      * Retrieves the birth day of the person holding this ID number as it is defined for a given
-     * birth day assertion.
+     * birth day assertion. Execution of <i>birthDayFunction</i> will never throw exception
+     * or return null.
      *
      * @param birthDayFunction An implementation of an ID number's birth day assertion.
      * @return The birth day represented by this ID number as valid for the given assertion logic.
      */
     public Optional<LocalDate> birthday(final Function<IdNumber, Optional<LocalDate>> birthDayFunction) {
+        return ensureOptionalOf(birthDayFunction);
+    }
+
+    /**
+     * Retrieves the birth day of the person holding this ID number as it is defined for a given
+     * birth day assertion. Clients implementing <i>birthDayFunction</i> are encouraged to check
+     * validity of ID number before retrieving birth date from ID number, as well as throw
+     * {@link RuntimeException} if ID number is not valid.
+     *
+     * @param birthDayFunction An implementation of an ID number's birth day assertion.
+     * @return The birth day represented by this ID number. Pay attention that this method
+     * can also return {@code null}.
+     */
+    public LocalDate getBirthday(final Function<IdNumber, LocalDate> birthDayFunction) {
         return birthDayFunction.apply(this);
+    }
+
+    /**
+     * Execute the given function in a context where null return values and exceptions are converted
+     * to empty {@link Optional}.
+     */
+    private <T> Optional<T> ensureOptionalOf(final Function<IdNumber, Optional<T>> ensuredFunction) {
+        final Optional<T> optionalValue;
+        try {
+            optionalValue = ensuredFunction.apply(this);
+        } catch (final Exception e) {
+            return Optional.<T>empty();
+        }
+        return optionalValue != null ? optionalValue : Optional.<T>empty();
     }
 
     /**
@@ -94,7 +139,12 @@ public class IdNumber {
      */
     public Optional<Period> age(final Function<IdNumber, Optional<LocalDate>> birthDayFunction) {
         return birthDayFunction.apply(this)
-                .map((birthday) -> birthday.until(now()))
-                .map((period) -> period.isNegative() ? ZERO : period);
+            .map((birthday) -> birthday.until(now()))
+            .map((age) -> age.isNegative() ? ZERO : age);
+    }
+
+    public Period getAge(final Function<IdNumber, LocalDate> birthDayFunction) {
+        final Period age = birthDayFunction.apply(this).until(now());
+        return age.isNegative() ? ZERO : age;
     }
 }
