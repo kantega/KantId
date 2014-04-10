@@ -1,0 +1,8 @@
+# Gradle generated files.
+.gradle/
+build/
+
+# Intellij IDEA generated files.
+.idea/
+*.iml
+classes/
