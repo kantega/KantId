@@ -66,26 +66,26 @@ public class FinnishIdNumberTest {
 
     @Test
     public void runningNumber_Between002And899_IsBornInFinland() {
-        assertTrue(forId("270288-002X").isBornInFinland());
-        assertTrue(forId("270288-899X").isBornInFinland());
-        assertTrue(forId("270288-345X").isBornInFinland());
+        assertTrue(forId("270288-002X").isFinnishBorn());
+        assertTrue(forId("270288-899X").isFinnishBorn());
+        assertTrue(forId("270288-345X").isFinnishBorn());
     }
 
     @Test
     public void runningNumber_001_IsNotBornInFinland() {
-        assertFalse(forId("270288-001X").isBornInFinland());
+        assertFalse(forId("270288-001X").isFinnishBorn());
     }
 
     @Test
     public void runningNumberGreater_Than899_IsNotBornInFinland() {
-        assertFalse(forId("270288-900X").isBornInFinland());
-        assertFalse(forId("270288-999X").isBornInFinland());
+        assertFalse(forId("270288-900X").isFinnishBorn());
+        assertFalse(forId("270288-999X").isFinnishBorn());
     }
 
     @Test
     public void wronglyFormattedIdNumber_IsNotBornInFinland() {
-        assertFalse(forId("270288-1000X").isBornInFinland());
-        assertFalse(forId("270288-aaac").isBornInFinland());
+        assertFalse(forId("270288-1000X").isFinnishBorn());
+        assertFalse(forId("270288-aaac").isFinnishBorn());
     }
 
     @Test

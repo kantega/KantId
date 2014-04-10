@@ -177,11 +177,11 @@ public class FinnishIdNumber extends LocalIdNumber {
     /**
      * IdNumber's controlnumber (digits 8-10) indicates place to birth.
      * Numbers (inclusively) in range 002-899 (larger numbers may be used in special cases) are
-     * considered as born in Finland.
+     * considered as finnish born person.
      *
      * @return true for persons born in Finland, otherwise false.
      */
-    public boolean isBornInFinland() {
+    public boolean isFinnishBorn() {
         final Matcher idFormat = IDNUMBER_PATTERN.matcher(getIdToken());
         if(idFormat.matches()) {
             int controlNumber = parseInt(idFormat.group(CONTROL_NUMBER));
