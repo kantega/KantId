@@ -5,9 +5,9 @@ import java.util.Locale;
 /**
  * Base class for ID numbers supporting locale.
  */
-public class LocalIdNumber extends IdNumber {
+public abstract class LocalIdNumber extends IdNumber {
 
-    public LocalIdNumber(final String idToken, Locale locale) {
+    protected LocalIdNumber(final String idToken, Locale locale) {
         super(idToken);
         if (!supports(locale)) {
             throw new IllegalArgumentException("Locale " + locale + " not supported");
@@ -15,24 +15,13 @@ public class LocalIdNumber extends IdNumber {
     }
 
     /**
-     * Provides an instance of {@link LocalIdNumber} with given {@link Locale}
+     * Check that a given locale is supported.
      *
-     * @param idToken of id number.
-     * @param locale for the current instance.
-     * @return An instance of {@link LocalIdNumber} with given locale.
-     */
-    public static LocalIdNumber forId(String idToken, Locale locale) {
-        return new LocalIdNumber(idToken, locale);
-    }
-
-    /**
-     * Defines support method for given locale. Users of this class
-     * are supposed to override this method.
+     * Implementers of this class should check whether their implementation
+     * supports the given locale.
      *
      * @param locale given locale.
      * @return true if locale is supported, false otherwise.
      */
-    protected boolean supports(Locale locale) {
-        return locale != null;
-    }
+    protected abstract boolean supports(Locale locale);
 }
