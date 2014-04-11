@@ -1,5 +1,7 @@
 ## KantId - extendable lightweight library for Id Numbers.
 
+[![Build Status](https://travis-ci.org/kantega/KantId.svg?branch=master)](https://travis-ci.org/kantega/KantId)
+
 *03.04.2014 version 0.2-SNAPSHOT*
 
 #### SUMMARY
