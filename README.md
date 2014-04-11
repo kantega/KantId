@@ -93,7 +93,7 @@ One of our main object is to encourage further API development by addition of mo
 * See usage patterns above, use your class via static methods or instance methods.
 
 #####_By extending LocalIdNumber_
-* Override _supports(Locale locale)_ method in no.kantega.id.api.LocalIdNumber to support your locale(s).
+* Implement _supports(Locale locale)_ method in no.kantega.id.api.LocalIdNumber to support your locale(s).
 ```java
     @Override
     protected boolean supports(Locale locale) {
