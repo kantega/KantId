@@ -1,8 +1,19 @@
 # Gradle generated files.
 .gradle/
 build/
+bin/
+settings.gradle
 
 # Intellij IDEA generated files.
 .idea/
 *.iml
 classes/
+
+# OSX generated files
+.DS_Store
+
+# Eclipse generated files
+.classpath
+.project
+.settings/
+
