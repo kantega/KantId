@@ -11,22 +11,16 @@ public class IcelandishIdNumber extends LocalIdNumber {
 
     public static final Locale LOCALE_ICELAND = new Locale("is", "IS");
 
-    protected IcelandishIdNumber(String idToken) {
-        super(idToken, LOCALE_ICELAND);
+    protected IcelandishIdNumber(String idToken, Locale locale) {
+        super(idToken, locale);
     }
 
-    /**
-     * Provide an instance of IdNumber with given locale (country Denmark is only supported)
-     * and implementation for methods of {@link no.kantega.id.api.IdNumber}.
-     *
-     * @param idToken of idNumber.
-     * @param locale for idNumber, must be supported.
-     * @return instance of DanishIdNumber.
-     * @throws IllegalArgumentException if locale is not supported. This class supports
-     * only locales with country set as Denmark.
-     */
     public static IcelandishIdNumber forId(String idToken) {
-        return new IcelandishIdNumber(idToken);
+        return new IcelandishIdNumber(idToken, LOCALE_ICELAND);
+    }
+
+    public static IcelandishIdNumber forId(String idToken, Locale locale) {
+        return new IcelandishIdNumber(idToken, locale);
     }
 
     @Override

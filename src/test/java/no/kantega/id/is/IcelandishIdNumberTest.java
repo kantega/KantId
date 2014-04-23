@@ -1,10 +1,6 @@
 package no.kantega.id.is;
 
-import no.kantega.id.api.IdNumber;
-import no.kantega.id.dk.DanishIdNumber;
 import org.junit.Test;
-
-import java.util.Locale;
 
 import static org.junit.Assert.assertTrue;
 
@@ -17,4 +13,15 @@ public class IcelandishIdNumberTest {
     public void icelandishIdNumberSupportsLocale() throws Exception {
         assertTrue(IcelandishIdNumber.forId("312321").supports(IcelandishIdNumber.LOCALE_ICELAND));
     }
+
+    @Test
+    public void icelandishIdNumberSupportsLocaleGiven() throws Exception {
+        assertTrue(IcelandishIdNumber.forId("312321", IcelandishIdNumber.LOCALE_ICELAND).supports(IcelandishIdNumber.LOCALE_ICELAND));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void emptyValueIsNotSupported() {
+        IcelandishIdNumber.forId(null);
+    }
 }
+    
