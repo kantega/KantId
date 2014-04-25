@@ -139,8 +139,8 @@ public class IdNumber {
      */
     public Optional<Period> age(final Function<IdNumber, Optional<LocalDate>> birthDayFunction) {
         return birthDayFunction.apply(this)
-            .map((birthday) -> birthday.until(now()))
-            .map((age) -> age.isNegative() ? ZERO : age);
+            .map(birthday -> birthday.until(now()))
+            .map(age -> age.isNegative() ? ZERO : age);
     }
 
     public Period getAge(final Function<IdNumber, LocalDate> birthDayFunction) {

@@ -41,7 +41,7 @@ public class IdNumberTest {
 
     @Test
     public void negativeAge_WillReturn_ZeroAge() {
-        assertThat(forId("123456-123J").age((id) -> of(now().plusDays(2))).get(), is(ZERO));
+        assertThat(forId("123456-123J").age(id -> of(now().plusDays(2))).get(), is(ZERO));
     }
 
     @Test
@@ -51,13 +51,13 @@ public class IdNumberTest {
 
     @Test
     public void genderFunctionReturning_NullWillReturn_EmptyOptional() {
-        assertThat(forId("123456-124X").gender((id) -> null), is(empty()));
+        assertThat(forId("123456-124X").gender(id -> null), is(empty()));
     }
 
     @Test
     public void genderFunction_WillReturnGenderOptional() {
-        assertThat(forId("123456-124X").gender((id) -> of(MALE)).get(), is(MALE));
-        assertThat(forId("123456-123Y").gender((id) -> of(FEMALE)).get(), is(FEMALE));
+        assertThat(forId("123456-124X").gender(id -> of(MALE)).get(), is(MALE));
+        assertThat(forId("123456-123Y").gender(id -> of(FEMALE)).get(), is(FEMALE));
     }
 
     @Test
@@ -67,13 +67,13 @@ public class IdNumberTest {
 
     @Test
     public void birthDateFunctionReturning_NullWillReturn_EmptyOptional() {
-        assertThat(forId("123456-124X").birthday((id) -> null), is(empty()));
+        assertThat(forId("123456-124X").birthday(id -> null), is(empty()));
     }
 
     @Test
     public void birthDateFunction_WillReturnLocalDateOptional() {
         LocalDate timeNow = now();
-        assertThat(forId("123456-124X").birthday((id) -> of(timeNow)).get(), is(timeNow));
+        assertThat(forId("123456-124X").birthday(id -> of(timeNow)).get(), is(timeNow));
     }
 
     @Test
@@ -81,12 +81,12 @@ public class IdNumberTest {
         LocalDate twoYearsAgo = now().minusYears(2);
         LocalDate thirtyFifeYearsOneMonthAgo = now().minusYears(35).minusMonths(1);
 
-        Period age = forId("123456-123K").age((idNumber) -> of(twoYearsAgo)).get();
+        Period age = forId("123456-123K").age(idNumber -> of(twoYearsAgo)).get();
         assertThat(age.getYears(), is(2));
         assertThat(age.getMonths(), is(0));
         assertThat(age.getDays(), is(0));
 
-        age = forId("123456-123K").age((idNumber) -> of(thirtyFifeYearsOneMonthAgo)).get();
+        age = forId("123456-123K").age(idNumber -> of(thirtyFifeYearsOneMonthAgo)).get();
         assertThat(age.getYears(), is(35));
         assertThat(age.getMonths(), is(1));
     }
