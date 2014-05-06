@@ -8,12 +8,14 @@ import java.time.LocalDate;
 import java.util.Locale;
 import java.util.Optional;
 
-import static java.lang.Character.getNumericValue;
 import static java.lang.Integer.parseInt;
 import static java.util.Optional.empty;
 
 /**
  * Created by kristofferskaret on 14.04.14.
+ * <p>
+ * http://en.wikipedia.org/wiki/Kennitala
+ * http://en.wikipedia.org/wiki/National_identification_number
  */
 public class IcelandishIdNumber extends LocalIdNumber {
 
@@ -36,9 +38,36 @@ public class IcelandishIdNumber extends LocalIdNumber {
         return LOCALE_ICELAND.getCountry().equals(locale.getCountry());
     }
 
-    public static boolean valid(final IdNumber idNumber) {
-        return idNumber.getIdToken().matches("\\d{6}-?\\d{4}") &&
-                birthday(idNumber).isPresent();
+    public static boolean valid(IdNumber idNumber) {
+        return patternMatches(idNumber) &&
+                birthday(idNumber).isPresent() &&
+                checkDigitIsValid(idNumber);
+    }
+
+    private static boolean patternMatches(IdNumber idNumber) {
+        return idNumber.getIdToken().matches("\\d{6}-?\\d{4}");
+    }
+
+    /**
+     * V = 11 - ((3a1 + 2a2 + 7a3 + 6a4 + 5a5 + 4a6 + 3a7 + 2a8) mod 11)
+     */
+    private static boolean checkDigitIsValid(IdNumber idNumber) {
+        int v = 11 - (Math.floorMod(
+                3 * digit(idNumber, 1) +
+                        2 * digit(idNumber, 2) +
+                        7 * digit(idNumber, 3) +
+                        6 * digit(idNumber, 4) +
+                        5 *digit(idNumber, 5) +
+                        4 * digit(idNumber, 6) +
+                        3 * digit(idNumber, 7) +
+                        2 * digit(idNumber, 8),11
+        ));
+
+        return digit(idNumber, 9) == v;
+    }
+
+    private static int digit(IdNumber idNumber, int index) {
+        return Character.getNumericValue(idNumber.getIdToken().replace("-", "").charAt(index));
     }
 
     /**
