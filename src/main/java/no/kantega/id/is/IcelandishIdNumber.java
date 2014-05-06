@@ -37,8 +37,8 @@ public class IcelandishIdNumber extends LocalIdNumber {
     }
 
     public static boolean valid(final IdNumber idNumber) {
-        return   idNumber.getIdToken().matches("\\d{6}-\\d{4}") &&
-                        birthday(idNumber).isPresent();
+        return idNumber.getIdToken().matches("\\d{6}-?\\d{4}") &&
+                birthday(idNumber).isPresent();
     }
 
     /**
@@ -50,11 +50,13 @@ public class IcelandishIdNumber extends LocalIdNumber {
      */
     public static Optional<LocalDate> birthday(final IdNumber idNumber) {
 
-        int day = parseInt(idNumber.getIdToken().substring(0, 2));
-        int month = parseInt(idNumber.getIdToken().substring(2, 4));
-        int shortYear = parseInt(idNumber.getIdToken().substring(4, 6));
+        String token = idNumber.getIdToken();
 
-        int centuryDigit = getNumericValue(idNumber.getIdToken().charAt(10));
+        int day = parseInt(token.substring(0, 2));
+        int month = parseInt(token.substring(2, 4));
+        int shortYear = parseInt(token.substring(4, 6));
+
+        int centuryDigit = Integer.valueOf((token.substring(token.length() - 1)));
         int year = calculateYear(shortYear, centuryDigit);
 
         try {

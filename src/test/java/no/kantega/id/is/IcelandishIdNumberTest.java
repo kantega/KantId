@@ -17,6 +17,8 @@ public class IcelandishIdNumberTest {
 
     private static final String VALID_ICE_IDNUMBER = "120174-3389";
     private static final String INVALID_ICE_IDNUMBER = "156774-3389";
+    public static final String WRONG_NUMBER_OF_DIGITS = "120174-338";
+    public static final String NO_HYPHEN = "1201743389";
 
     @Test
     public void icelandishIdNumberSupportsLocale() throws Exception {
@@ -51,12 +53,12 @@ public class IcelandishIdNumberTest {
 
     @Test
     public void wrongNumberOfDigitsInvalidates() {
-        assertFalse(IcelandishIdNumber.forId("120174-338").isValid(IcelandishIdNumber::valid));
+        assertFalse(IcelandishIdNumber.forId(WRONG_NUMBER_OF_DIGITS).isValid(IcelandishIdNumber::valid));
     }
 
     @Test
-    public void missingDashInvalidates() {
-        assertFalse(IcelandishIdNumber.forId("1201743389").isValid(IcelandishIdNumber::valid));
+    public void hyphenIsOptional() {
+        assertTrue(IcelandishIdNumber.forId(NO_HYPHEN).isValid(IcelandishIdNumber::valid));
     }
 
 
