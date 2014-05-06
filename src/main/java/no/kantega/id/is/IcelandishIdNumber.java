@@ -3,12 +3,14 @@ package no.kantega.id.is;
 import no.kantega.id.api.IdNumber;
 import no.kantega.id.api.LocalIdNumber;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Locale;
 import java.util.Optional;
 
 import static java.lang.Character.getNumericValue;
 import static java.lang.Integer.parseInt;
+import static java.util.Optional.empty;
 
 /**
  * Created by kristofferskaret on 14.04.14.
@@ -35,7 +37,8 @@ public class IcelandishIdNumber extends LocalIdNumber {
     }
 
     public static boolean valid(final IdNumber idNumber) {
-        return true;
+        return   idNumber.getIdToken().matches("\\d{6}-\\d{4}") &&
+                        birthday(idNumber).isPresent();
     }
 
     /**
@@ -54,7 +57,11 @@ public class IcelandishIdNumber extends LocalIdNumber {
         int centuryDigit = getNumericValue(idNumber.getIdToken().charAt(10));
         int year = calculateYear(shortYear, centuryDigit);
 
-        return Optional.of(LocalDate.of(year, month, day));
+        try {
+            return Optional.of(LocalDate.of(year, month, day));
+        } catch (DateTimeException e) {
+            return empty();
+        }
     }
 
     private static int calculateYear(int shortYear, int centuryDigit) {
