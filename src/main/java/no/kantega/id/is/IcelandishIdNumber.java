@@ -26,7 +26,7 @@ import static java.util.Optional.empty;
  * <p>
  * http://www.skra.is/thjodskra/um-thjodskra-/um-kennitolur/
  * http://bjss.bifrost.is/index.php/bjss/article/view/63/65
- * http://en.wikipedia.org/wiki/Kennitala  NB: The example idnumber in the wikipedia article has an incorrect check digit. Correct should be 120174-3399
+ * http://en.wikipedia.org/wiki/Kennitala
  * http://en.wikipedia.org/wiki/National_identification_number
  * <p>
  */
