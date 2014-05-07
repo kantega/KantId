@@ -14,6 +14,8 @@ import static java.util.Optional.empty;
 /**
  * Created by kristofferskaret on 14.04.14.
  * <p>
+ * Description of Icelandish ID-number:
+ * <p>
  * http://en.wikipedia.org/wiki/Kennitala
  * http://en.wikipedia.org/wiki/National_identification_number
  */
@@ -38,17 +40,27 @@ public class IcelandishIdNumber extends LocalIdNumber {
         return LOCALE_ICELAND.getCountry().equals(locale.getCountry());
     }
 
+    /**
+     * The idNumber is valid if the following conditions is true:
+     * - it matches the correct pattern
+     * - it contains a valid birthday
+     * - it contaions a valid check digit
+     */
     public static boolean valid(IdNumber idNumber) {
         return patternMatches(idNumber) &&
                 birthday(idNumber).isPresent() &&
                 checkDigitIsValid(idNumber);
     }
 
+    /**
+     * check if the IdNumber matches the correct pattern (like 20174-3389 or 1201743389)
+     */
     private static boolean patternMatches(IdNumber idNumber) {
         return idNumber.getIdToken().matches("\\d{6}-?\\d{4}");
     }
 
     /**
+     * Formula:
      * V = 11 - ((3a1 + 2a2 + 7a3 + 6a4 + 5a5 + 4a6 + 3a7 + 2a8) mod 11)
      */
     private static boolean checkDigitIsValid(IdNumber idNumber) {
@@ -57,25 +69,24 @@ public class IcelandishIdNumber extends LocalIdNumber {
                         2 * digit(idNumber, 2) +
                         7 * digit(idNumber, 3) +
                         6 * digit(idNumber, 4) +
-                        5 *digit(idNumber, 5) +
+                        5 * digit(idNumber, 5) +
                         4 * digit(idNumber, 6) +
                         3 * digit(idNumber, 7) +
-                        2 * digit(idNumber, 8),11
+                        2 * digit(idNumber, 8), 11
         ));
 
         return digit(idNumber, 9) == v;
     }
 
+    /**
+     * @return the digit with the index given
+     */
     private static int digit(IdNumber idNumber, int index) {
         return Character.getNumericValue(idNumber.getIdToken().replace("-", "").charAt(index));
     }
 
     /**
-     * Calculates optional birthday for the given id number. Calculation is based on
-     * 7 first characters of the idNumber where the 7th character represents century.
-     *
-     * @param idNumber where birthday is calculated from.
-     * @return optional birthday, or empty in case of invalid date or invalid idNumber format.
+     * @return the birthday, or none if no valid birtday can be retrieved
      */
     public static Optional<LocalDate> birthday(final IdNumber idNumber) {
 
@@ -95,6 +106,9 @@ public class IcelandishIdNumber extends LocalIdNumber {
         }
     }
 
+    /**
+     * @return the year based on shortYear (two digits) and centuryDigit
+     */
     private static int calculateYear(int shortYear, int centuryDigit) {
 
         int century;

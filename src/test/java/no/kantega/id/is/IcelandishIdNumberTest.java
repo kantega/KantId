@@ -16,7 +16,8 @@ import static org.junit.Assert.assertTrue;
 public class IcelandishIdNumberTest {
 
     private static final String VALID_ICE_IDNUMBER = "120174-3389";
-    private static final String INVALID_ICE_IDNUMBER = "156774-3389";
+    private static final String INVALID_BIRTHDAY = "156774-3389";
+    private static final String INVALID_CHECK_DIGIT = "120174-3379";
     public static final String WRONG_NUMBER_OF_DIGITS = "120174-338";
     public static final String NO_HYPHEN = "1201743389";
 
@@ -47,8 +48,13 @@ public class IcelandishIdNumberTest {
     }
 
     @Test
-    public void invalidIdNumberInvalidates() {
-        assertFalse(IcelandishIdNumber.forId(INVALID_ICE_IDNUMBER).isValid(IcelandishIdNumber::valid));
+    public void invalidBirthdayInvalidates() {
+        assertFalse(IcelandishIdNumber.forId(INVALID_BIRTHDAY).isValid(IcelandishIdNumber::valid));
+    }
+
+    @Test
+    public void invalidCheckDigitInvalidates() {
+        assertFalse(IcelandishIdNumber.forId(INVALID_CHECK_DIGIT).isValid(IcelandishIdNumber::valid));
     }
 
     @Test
@@ -66,12 +72,6 @@ public class IcelandishIdNumberTest {
     public void mustReturnCorrectBirtday() {
         assertThat(IcelandishIdNumber.forId(VALID_ICE_IDNUMBER).birthday(IcelandishIdNumber::birthday).get(), CoreMatchers.is(LocalDate.of(1974, 01, 12)));
     }
-
-    @Test
-    public void mustReturnCorrectAge() {
-
-    }
-
 
 }
     
