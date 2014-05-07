@@ -75,26 +75,33 @@ public class IcelandishIdNumber extends LocalIdNumber {
      * V = 11 - ((3a1 + 2a2 + 7a3 + 6a4 + 5a5 + 4a6 + 3a7 + 2a8) mod 11)
      */
     private static boolean checkDigitIsValid(IdNumber idNumber) {
+        int[] digit = digits(idNumber);
         int v = 11 - (
-                3 * digit(idNumber, 0) +
-                        2 * digit(idNumber, 1) +
-                        7 * digit(idNumber, 2) +
-                        6 * digit(idNumber, 3) +
-                        5 * digit(idNumber, 4) +
-                        4 * digit(idNumber, 5) +
-                        3 * digit(idNumber, 6) +
-                        2 * digit(idNumber, 7)
+                3 * digit[0] +
+                        2 * digit[1] +
+                        7 * digit[2] +
+                        6 * digit[3] +
+                        5 * digit[4] +
+                        4 * digit[5] +
+                        3 * digit[6] +
+                        2 * digit[7]
         ) % 11;
 
-
-        return digit(idNumber, 8) == v;
+        return digit[8] == v;
     }
 
     /**
-     * @return the digit with the index given
+     * @return IdNumber as array of digits
      */
-    private static int digit(IdNumber idNumber, int index) {
-        return Character.getNumericValue(idNumber.getIdToken().replace("-", "").charAt(index));
+    private static int[] digits(IdNumber idNumber) {
+
+        String strippedToken = idNumber.getIdToken().replace("-", "");
+
+        int[] digit = new int[10];
+        for (int i = 0; i < digit.length; i++) {
+            digit[i] = Character.getNumericValue(strippedToken.charAt(i));
+        }
+        return digit;
     }
 
     /**
