@@ -12,12 +12,23 @@ import static java.lang.Integer.parseInt;
 import static java.util.Optional.empty;
 
 /**
- * Created by kristofferskaret on 14.04.14.
+ * Representation of an Icelandish ID-number (Kennitala/Kennitölur).
  * <p>
- * Description of Icelandish ID-number:
+ * Kennitölur are composed of ten digits. For a personal kennitala, the first six of these are the individual's
+ * date of birth in the format DDMMYY.[1] The seventh and eighth digits are randomly chosen when the kennitala
+ * is allocated, the ninth is a check digit, and the tenth indicates the century of the individual's birth: '9' for 1900–1999,
+ * '0' for 2000 and beyond. Kennitölur are often written with a hyphen following the first six digits, e.g. 120174-3399.
  * <p>
- * http://en.wikipedia.org/wiki/Kennitala
+ * The check digit equations is V = 11 - ((3a1 + 2a2 + 7a3 + 6a4 + 5a5 + 4a6 + 3a7 + 2a8) mod 11)
+ * <p>
+ * <p>
+ * More information:
+ * <p>
+ * http://www.skra.is/thjodskra/um-thjodskra-/um-kennitolur/
+ * http://bjss.bifrost.is/index.php/bjss/article/view/63/65
+ * http://en.wikipedia.org/wiki/Kennitala  NB: The example idnumber in the wikipedia article has an incorrect check digit. Correct should be 120174-3399
  * http://en.wikipedia.org/wiki/National_identification_number
+ * <p>
  */
 public class IcelandishIdNumber extends LocalIdNumber {
 
@@ -64,18 +75,19 @@ public class IcelandishIdNumber extends LocalIdNumber {
      * V = 11 - ((3a1 + 2a2 + 7a3 + 6a4 + 5a5 + 4a6 + 3a7 + 2a8) mod 11)
      */
     private static boolean checkDigitIsValid(IdNumber idNumber) {
-        int v = 11 - (Math.floorMod(
-                3 * digit(idNumber, 1) +
-                        2 * digit(idNumber, 2) +
-                        7 * digit(idNumber, 3) +
-                        6 * digit(idNumber, 4) +
-                        5 * digit(idNumber, 5) +
-                        4 * digit(idNumber, 6) +
-                        3 * digit(idNumber, 7) +
-                        2 * digit(idNumber, 8), 11
-        ));
+        int v = 11 - (
+                3 * digit(idNumber, 0) +
+                        2 * digit(idNumber, 1) +
+                        7 * digit(idNumber, 2) +
+                        6 * digit(idNumber, 3) +
+                        5 * digit(idNumber, 4) +
+                        4 * digit(idNumber, 5) +
+                        3 * digit(idNumber, 6) +
+                        2 * digit(idNumber, 7)
+        ) % 11;
 
-        return digit(idNumber, 9) == v;
+
+        return digit(idNumber, 8) == v;
     }
 
     /**

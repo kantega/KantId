@@ -15,11 +15,11 @@ import static org.junit.Assert.assertTrue;
  */
 public class IcelandishIdNumberTest {
 
-    private static final String VALID_ICE_IDNUMBER = "120174-3389";
-    private static final String INVALID_BIRTHDAY = "156774-3389";
+    private static final String VALID_ICE_IDNUMBER = "120174-3399";
+    private static final String INVALID_BIRTHDAY = "156774-3399";
     private static final String INVALID_CHECK_DIGIT = "120174-3379";
     public static final String WRONG_NUMBER_OF_DIGITS = "120174-338";
-    public static final String NO_HYPHEN = "1201743389";
+    public static final String NO_HYPHEN = "1201743399";
 
     @Test
     public void icelandishIdNumberSupportsLocale() throws Exception {
