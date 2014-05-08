@@ -9,11 +9,12 @@
 
 This project provides a simple API to manage National Id numbers. The API uses the Java 8 functional programming paradigm which results in a much lighter, flexible and extensible API.
 
-At the moment there is an implementation for 4 nordic countries:
+At the moment there is an implementation for 5 nordic countries:
 * [Denmark](http://kantega.github.io/KantId/kantid/docs/javadoc/no/kantega/id/dk/DanishIdNumber.html)
 * [Finland](http://kantega.github.io/KantId/kantid/docs/javadoc/no/kantega/id/fin/FinnishIdNumber.html)
 * [Norway](http://kantega.github.io/KantId/kantid/docs/javadoc/no/kantega/id/no/NorwegianIdNumber.html)
 * [Sweden](http://kantega.github.io/KantId/kantid/docs/javadoc/no/kantega/id/se/SwedishIdNumber.html)
+* Iceland
 
 For each of these countries the library provides:
 * Validation
@@ -113,7 +114,8 @@ One of our main object is to encourage further API development by addition of mo
   * [Sweden](http://en.wikipedia.org/wiki/National_identification_number#Sweden)
   * [Finland](http://en.wikipedia.org/wiki/National_identification_number#Finland)
   * [Denmark](http://en.wikipedia.org/wiki/National_identification_number#Denmark) (official [documentation](https://cpr.dk/media/167692/personnummeret%20i%20cpr.pdf))
-
+  * [Iceland](http://en.wikipedia.org/wiki/Kennitala)
+  
 #### LICENSE
 ***
 Published under [Apache License, version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
