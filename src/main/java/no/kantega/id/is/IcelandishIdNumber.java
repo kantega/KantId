@@ -94,14 +94,10 @@ public class IcelandishIdNumber extends LocalIdNumber {
      * @return IdNumber as array of digits
      */
     private static int[] digits(IdNumber idNumber) {
-
-        String strippedToken = idNumber.getIdToken().replace("-", "");
-
-        int[] digit = new int[10];
-        for (int i = 0; i < digit.length; i++) {
-            digit[i] = Character.getNumericValue(strippedToken.charAt(i));
-        }
-        return digit;
+        return idNumber.getIdToken().chars() // stream of chars
+                .filter(c -> c != '-') // filter out hyphen
+                .map(Character::getNumericValue) // convert to int
+                .toArray();
     }
 
     /**
