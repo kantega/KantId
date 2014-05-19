@@ -21,15 +21,15 @@ import static java.util.Optional.empty;
  * 120174-3399.
  * <p>
  * The check digit equations is V = 11 - ((3a1 + 2a2 + 7a3 + 6a4 + 5a5 + 4a6 + 3a7 + 2a8) mod 11)
- * </p>
+ * <p>
  * <p>
  * More information:
- * </p>
+ * <p>
  * http://www.skra.is/thjodskra/um-thjodskra-/um-kennitolur/
  * http://bjss.bifrost.is/index.php/bjss/article/view/63/65
  * http://en.wikipedia.org/wiki/Kennitala
  * http://en.wikipedia.org/wiki/National_identification_number
- * </p>
+ * <p>
  */
 public class IcelandishIdNumber extends LocalIdNumber {
 
