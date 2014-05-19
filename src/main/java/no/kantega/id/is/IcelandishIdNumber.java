@@ -16,38 +16,41 @@ import static java.util.Optional.empty;
  * <p>
  * Kennitölur are composed of ten digits. For a personal kennitala, the first six of these are the individual's
  * date of birth in the format DDMMYY.[1] The seventh and eighth digits are randomly chosen when the kennitala
- * is allocated, the ninth is a check digit, and the tenth indicates the century of the individual's birth: '9' for 1900–1999,
- * '0' for 2000 and beyond. Kennitölur are often written with a hyphen following the first six digits, e.g. 120174-3399.
+ * is allocated, the ninth is a check digit, and the tenth indicates the century of the individual's birth: '9' for
+ * 1900–1999, '0' for 2000 and beyond. Kennitölur are often written with a hyphen following the first six digits, e.g.
+ * 120174-3399.
  * <p>
  * The check digit equations is V = 11 - ((3a1 + 2a2 + 7a3 + 6a4 + 5a5 + 4a6 + 3a7 + 2a8) mod 11)
- * <p>
+ * </p>
  * <p>
  * More information:
- * <p>
+ * </p>
  * http://www.skra.is/thjodskra/um-thjodskra-/um-kennitolur/
  * http://bjss.bifrost.is/index.php/bjss/article/view/63/65
  * http://en.wikipedia.org/wiki/Kennitala
  * http://en.wikipedia.org/wiki/National_identification_number
- * <p>
+ * </p>
  */
 public class IcelandishIdNumber extends LocalIdNumber {
 
     public static final Locale LOCALE_ICELAND = new Locale("is", "IS");
 
-    protected IcelandishIdNumber(String idToken, Locale locale) {
+    private static final int DIVIDER = 11;
+
+    protected IcelandishIdNumber(final String idToken, final Locale locale) {
         super(idToken, locale);
     }
 
-    public static IcelandishIdNumber forId(String idToken) {
+    public static IcelandishIdNumber forId(final String idToken) {
         return new IcelandishIdNumber(idToken, LOCALE_ICELAND);
     }
 
-    public static IcelandishIdNumber forId(String idToken, Locale locale) {
+    public static IcelandishIdNumber forId(final String idToken, final Locale locale) {
         return new IcelandishIdNumber(idToken, locale);
     }
 
     @Override
-    protected boolean supports(Locale locale) {
+    protected boolean supports(final Locale locale) {
         return LOCALE_ICELAND.getCountry().equals(locale.getCountry());
     }
 
@@ -57,16 +60,16 @@ public class IcelandishIdNumber extends LocalIdNumber {
      * - it contains a valid birthday
      * - it contaions a valid check digit
      */
-    public static boolean valid(IdNumber idNumber) {
+    public static boolean valid(final IdNumber idNumber) {
         return patternMatches(idNumber) &&
-                birthday(idNumber).isPresent() &&
-                checkDigitIsValid(idNumber);
+               birthday(idNumber).isPresent() &&
+               checkDigitIsValid(idNumber);
     }
 
     /**
      * check if the IdNumber matches the correct pattern (like 20174-3389 or 1201743389)
      */
-    private static boolean patternMatches(IdNumber idNumber) {
+    private static boolean patternMatches(final IdNumber idNumber) {
         return idNumber.getIdToken().matches("\\d{6}-?\\d{4}");
     }
 
@@ -74,30 +77,27 @@ public class IcelandishIdNumber extends LocalIdNumber {
      * Formula:
      * V = 11 - ((3a1 + 2a2 + 7a3 + 6a4 + 5a5 + 4a6 + 3a7 + 2a8) mod 11)
      */
-    private static boolean checkDigitIsValid(IdNumber idNumber) {
-        int[] digit = digits(idNumber);
-        int v = 11 - (
-                3 * digit[0] +
-                        2 * digit[1] +
-                        7 * digit[2] +
-                        6 * digit[3] +
-                        5 * digit[4] +
-                        4 * digit[5] +
-                        3 * digit[6] +
-                        2 * digit[7]
-        ) % 11;
-
+    private static boolean checkDigitIsValid(final IdNumber idNumber) {
+        final int[] digit = digits(idNumber);
+        final int v = DIVIDER - (3 * digit[0] +
+                      2 * digit[1] +
+                      7 * digit[2] +
+                      6 * digit[3] +
+                      5 * digit[4] +
+                      4 * digit[5] +
+                      3 * digit[6] +
+                      2 * digit[7]) % DIVIDER;
         return digit[8] == v;
     }
 
     /**
      * @return IdNumber as array of digits
      */
-    private static int[] digits(IdNumber idNumber) {
+    private static int[] digits(final IdNumber idNumber) {
         return idNumber.getIdToken().chars() // stream of chars
-                .filter(c -> c != '-') // filter out hyphen
-                .map(Character::getNumericValue) // convert to int
-                .toArray();
+            .filter(c -> c != '-') // filter out hyphen
+            .map(Character::getNumericValue) // convert to int
+            .toArray();
     }
 
     /**
@@ -105,18 +105,18 @@ public class IcelandishIdNumber extends LocalIdNumber {
      */
     public static Optional<LocalDate> birthday(final IdNumber idNumber) {
 
-        String token = idNumber.getIdToken();
+        final String token = idNumber.getIdToken();
 
-        int day = parseInt(token.substring(0, 2));
-        int month = parseInt(token.substring(2, 4));
-        int shortYear = parseInt(token.substring(4, 6));
+        final int day = parseInt(token.substring(0, 2));
+        final int month = parseInt(token.substring(2, 4));
+        final int shortYear = parseInt(token.substring(4, 6));
 
-        int centuryDigit = Integer.valueOf((token.substring(token.length() - 1)));
-        int year = calculateYear(shortYear, centuryDigit);
+        final int centuryDigit = Integer.valueOf((token.substring(token.length() - 1)));
+        final int year = calculateYear(shortYear, centuryDigit);
 
         try {
             return Optional.of(LocalDate.of(year, month, day));
-        } catch (DateTimeException e) {
+        } catch (final DateTimeException e) {
             return empty();
         }
     }
@@ -124,9 +124,9 @@ public class IcelandishIdNumber extends LocalIdNumber {
     /**
      * @return the year based on shortYear (two digits) and centuryDigit
      */
-    private static int calculateYear(int shortYear, int centuryDigit) {
+    private static int calculateYear(final int shortYear, final int centuryDigit) {
 
-        int century;
+        final int century;
         if (centuryDigit == 0) {
             century = 2000;
         } else {
