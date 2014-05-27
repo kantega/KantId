@@ -15,6 +15,7 @@ At the moment there is an implementation for 5 nordic countries:
 * [Norway](http://kantega.github.io/KantId/kantid/docs/javadoc/no/kantega/id/no/NorwegianIdNumber.html)
 * [Sweden](http://kantega.github.io/KantId/kantid/docs/javadoc/no/kantega/id/se/SwedishIdNumber.html)
 * [Iceland](http://kantega.github.io/KantId/kantid/docs/javadoc/no/kantega/id/is/IcelandishIdNumber.html)
+* [Ireland](http://kantega.github.io/KantId/kantid/docs/javadoc/no/kantega/id/ie/PersonalPublicServiceNumber.html)
 
 For each of these countries the library provides:
 * Validation
