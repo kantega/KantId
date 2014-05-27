@@ -1,5 +1,7 @@
 package no.kantega.id.api;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.lang.RuntimeException;
 import java.time.LocalDate;
 import java.time.Period;
@@ -10,7 +12,6 @@ import java.util.function.Predicate;
 import static java.time.LocalDate.now;
 import static java.time.Period.ZERO;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.trim;
 
 /**
  * Base class for implementations of an ID number. This class is not capable of understanding the meaning of any
@@ -32,7 +33,7 @@ public class IdNumber {
         if (isBlank(idToken)) {
             throw new IllegalArgumentException("Id token was empty or null.");
         }
-        this.idToken = trim(idToken);
+        this.idToken = cleanup(idToken);
     }
 
     /**
@@ -146,5 +147,17 @@ public class IdNumber {
     public Period getAge(final Function<IdNumber, LocalDate> birthDayFunction) {
         final Period age = birthDayFunction.apply(this).until(now());
         return age.isNegative() ? ZERO : age;
+    }
+
+    /**
+     * Clean up idToken before setting #idToken field.
+     *
+     * Implementing classes can override this to provide their own ways to clean an id number.
+     *
+     * @param idNumber    id numnber string representation to clean.
+     * @return A clean (default: trimmed) version of the id number.
+     */
+    protected String cleanup(String idNumber) {
+        return StringUtils.trim(idNumber);
     }
 }
