@@ -37,11 +37,11 @@ public class PersonalPublicServiceNumber extends LocalIdNumber {
     private static final Pattern IDNUMBER_PATTERN =
         compile("([0-9]{7})([A-Z])([A-Z]?)");
 
-    private static final int NUMBER = 1;
+    private static final int NUMBER_GROUP = 1;
 
-    private static final int CONTROL_CHAR = 2;
+    private static final int CONTROL_CHAR_GROUP = 2;
 
-    private static final int SECOND_CHAR_OPT = 3;
+    private static final int SECOND_CHAR_OPT_GROUP = 3;
 
     public PersonalPublicServiceNumber(final String idToken) {
         super(idToken, LOCALE_IE);
@@ -93,8 +93,8 @@ public class PersonalPublicServiceNumber extends LocalIdNumber {
     }
 
     private boolean hasValidControl(Matcher idFormat) {
-        String number = idFormat.group(NUMBER);
-        char c1 = idFormat.group(CONTROL_CHAR).charAt(0);
+        String number = idFormat.group(NUMBER_GROUP);
+        char c1 = idFormat.group(CONTROL_CHAR_GROUP).charAt(0);
 
         int[] weights = {8,7,6,5,4,3,2};
         int sum = 0;
@@ -114,7 +114,7 @@ public class PersonalPublicServiceNumber extends LocalIdNumber {
      * the second letter is always a letter 'W'.
      */
     private boolean secondCharMissingOrValid(Matcher idFormat) {
-        String group = idFormat.group(SECOND_CHAR_OPT);
+        String group = idFormat.group(SECOND_CHAR_OPT_GROUP);
         boolean hasOptionalChar = group != null && !group.isEmpty();
         if (hasOptionalChar) {
             char optionalChar = group.charAt(0);
