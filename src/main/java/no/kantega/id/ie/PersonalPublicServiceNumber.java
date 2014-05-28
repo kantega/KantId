@@ -12,7 +12,7 @@ import static java.util.regex.Pattern.compile;
 
 /**
  * Representation of a <i>Personal Public Service Number (PPS No)</i> which is issued by a number of public services,
- * including education, health, housing, social welfare, and tax. A5. A PPS No. is always 7 numbers,
+ * including education, health, housing, social welfare, and tax. A5. A PPS No. is always 7 digits,
  * and followed by either one or two letters. If there are two letters, the second letter is always a letter 'W'.
  * <p>
  * The check character is calculated using a weighted addition of all the numbers and modulus calculation. It
