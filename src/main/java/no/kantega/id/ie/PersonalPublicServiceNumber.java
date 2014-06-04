@@ -5,6 +5,7 @@ import no.kantega.id.api.LocalIdNumber;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,7 +14,7 @@ import static java.util.regex.Pattern.compile;
 /**
  * Representation of a <i>Personal Public Service Number (PPS No)</i> which is issued by a number of public services,
  * including education, health, housing, social welfare, and tax. A5. A PPS No. is always 7 digits,
- * and followed by either one or two letters. If there are two letters, the second letter is always a letter 'W'.
+ * and followed by either one or two letters.
  * <p>
  * The check character is calculated using a weighted addition of all the numbers and modulus calculation. It
  * therefore checks for incorrectly entered digits and for digit transposition (digits in the wrong order will alter
@@ -36,6 +37,8 @@ public class PersonalPublicServiceNumber extends LocalIdNumber {
 
     private static final Pattern IDNUMBER_PATTERN =
         compile("([0-9]{7})([A-Z])([A-Z]?)");
+
+    public static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     private static final int NUMBER_GROUP = 1;
 
@@ -92,40 +95,63 @@ public class PersonalPublicServiceNumber extends LocalIdNumber {
         return in.toUpperCase(LOCALE_IE);
     }
 
+    /**
+     * Check for valid checksum.
+     */
     private boolean hasValidControl(Matcher idFormat) {
-        String number = idFormat.group(NUMBER_GROUP);
-        char c1 = idFormat.group(CONTROL_CHAR_GROUP).charAt(0);
-
         int[] weights = {8,7,6,5,4,3,2};
         int sum = 0;
 
-        for (int i = 0; i < number.length(); i++) {
-            sum = sum + weights[i] * digitAt(number, i);
+        String digits = digits(idFormat);
+        for (int i = 0; i < digits.length(); i++) {
+            sum = sum + weights[i] * digitAt(digits, i);
         }
 
-        int ctrl = (sum % 23);
-        char controlChar = CONTROL_CHARS[ctrl];
+        // From Jan. 2013, the optional second character is also part of the checksum.
+        Optional<Character> c2 = secondChar(idFormat);
+        if (c2.isPresent()) {
+            sum = sum + 9 * controlIndex(c2.get());
+        }
 
-        return c1 == controlChar;
+        int ctrl = sum % 23;
+        char calculatedControl = CONTROL_CHARS[ctrl];
+
+        return controlChar(idFormat) == calculatedControl;
     }
 
-    /**
-     * A5. A PPS No. is always 7 numbers, and followed by either one or two letters. If there are two letters,
-     * the second letter is always a letter 'W'.
-     */
-    private boolean secondCharMissingOrValid(Matcher idFormat) {
-        String group = idFormat.group(SECOND_CHAR_OPT_GROUP);
-        boolean hasOptionalChar = group != null && !group.isEmpty();
-        if (hasOptionalChar) {
-            char optionalChar = group.charAt(0);
-            return 'W' == optionalChar;
+    private String digits(Matcher idFormat) {
+        return idFormat.group(NUMBER_GROUP);
+    }
+
+    private char controlChar(Matcher idFormat) {
+        return idFormat.group(CONTROL_CHAR_GROUP).charAt(0);
+    }
+
+    private Optional<Character> secondChar(Matcher idFormat) {
+        Optional<String> optionalChar = Optional.ofNullable(idFormat.group(SECOND_CHAR_OPT_GROUP));
+        if (!optionalChar.isPresent() || optionalChar.get().isEmpty()) {
+            return Optional.empty();
         } else {
-            return true;
+            return Optional.of(optionalChar.get().charAt(0));
         }
+    }
+
+    private int controlIndex(char character) {
+        // A = 1, B = 2, ...
+        return 1 + ALPHABET.indexOf(character);
     }
 
     private int digitAt(String number, int i) {
         return Character.getNumericValue(number.charAt(i));
+    }
+
+    /**
+     * Checks the validity of this ID.
+     *
+     * @return {@code true} if this ID is valid by measures of the Norwegian ID definition.
+     */
+    public boolean isValid() {
+        return valid(this);
     }
 
     /**
@@ -141,8 +167,7 @@ public class PersonalPublicServiceNumber extends LocalIdNumber {
         PersonalPublicServiceNumber ppsn = forId(idNumber.getIdToken());
         Matcher format = IDNUMBER_PATTERN.matcher(ppsn.getIdToken());
         return format.matches()
-               && ppsn.hasValidControl(format)
-               && ppsn.secondCharMissingOrValid(format);
+               && ppsn.hasValidControl(format);
     }
 
 }
