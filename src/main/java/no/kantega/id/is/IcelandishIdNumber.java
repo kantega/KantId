@@ -22,14 +22,12 @@ import static java.util.Optional.empty;
  * <p>
  * The check digit equations is V = 11 - ((3a1 + 2a2 + 7a3 + 6a4 + 5a5 + 4a6 + 3a7 + 2a8) mod 11)
  * <p>
- * <p>
  * More information:
  * <p>
  * http://www.skra.is/thjodskra/um-thjodskra-/um-kennitolur/
  * http://bjss.bifrost.is/index.php/bjss/article/view/63/65
  * http://en.wikipedia.org/wiki/Kennitala
  * http://en.wikipedia.org/wiki/National_identification_number
- * <p>
  */
 public class IcelandishIdNumber extends LocalIdNumber {
 
@@ -56,9 +54,14 @@ public class IcelandishIdNumber extends LocalIdNumber {
 
     /**
      * The idNumber is valid if the following conditions is true:
-     * - it matches the correct pattern
-     * - it contains a valid birthday
-     * - it contaions a valid check digit
+     * <ul><li>it matches the correct pattern</li>
+     * <li>it contains a valid birthday</li>
+     * <li>it contaions a valid check digit</li>
+     * </ul>
+     *
+     * @param idNumber ID number to validate
+     * @return true if ID number is valid, else false.
+
      */
     public static boolean valid(final IdNumber idNumber) {
         return patternMatches(idNumber) &&
@@ -102,6 +105,7 @@ public class IcelandishIdNumber extends LocalIdNumber {
 
     /**
      * @return the birthday, or none if no valid birtday can be retrieved
+     * @param idNumber ID number to validate
      */
     public static Optional<LocalDate> birthday(final IdNumber idNumber) {
 
