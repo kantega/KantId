@@ -9,7 +9,7 @@
 
 This project provides a simple API to manage National Id numbers. The API uses the Java 8 functional programming paradigm which results in a much lighter, flexible and extensible API.
 
-At the moment there is an implementation for 5 nordic countries:
+At the moment there is an implementation for 5 nordic countries and Ireland:
 * [Denmark](http://kantega.github.io/KantId/kantid/docs/javadoc/no/kantega/id/dk/DanishIdNumber.html)
 * [Finland](http://kantega.github.io/KantId/kantid/docs/javadoc/no/kantega/id/fin/FinnishIdNumber.html)
 * [Norway](http://kantega.github.io/KantId/kantid/docs/javadoc/no/kantega/id/no/NorwegianIdNumber.html)
