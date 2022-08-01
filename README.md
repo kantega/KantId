@@ -24,13 +24,13 @@ For each of these countries the library provides:
 * Age calculation
 
 #### USAGE
-#####_Get an instance either from constructor or factory:_
+##### Get an instance either from constructor or factory:
 ```java
 forId("13020955966");
 new NorwegianIdNumber("13020955966");
 new NorwegianIdNumber("13020955966", LOCALE_NOR);
 ```
-#####_Use methods of selected implementation, and instance:_
+##### Use methods of selected implementation, and instance:
 ```java
 forId("13020955966").isValid(NorwegianIdNumber::valid)
 forId("540629-7407").isValid(FinnishIdNumber::Valid)
@@ -46,17 +46,17 @@ danishIdNumber.age(DanishIdNumber::birthday)
 ***
 - JDK 8
 
-#####_For building_
+##### For building
 - Gradle v. 1.9 or newer (optional, you can also just use gradlew (*nix) or gradlew.bat (win)
 
 
 #### INSTALLATION
 ***
-#####_From source code_
+##### From source code
 * Clone git repository at: https://github.com/kantega/KantId.git
 * Compile with Java 8 and Gradle: "gradle build"
 
-#####_From repository_
+##### From repository
 * _Gradle_: group: 'no.kantega', name: 'KantId', version: '0.1'
 * _Maven_:
 ```xml
@@ -96,7 +96,7 @@ One of our main object is to encourage further API development by addition of mo
 ```
 * See usage patterns above, use your class via static methods or instance methods.
 
-#####_By extending LocalIdNumber_
+##### By extending LocalIdNumber
 * Implement _supports(Locale locale)_ method in no.kantega.id.api.LocalIdNumber to support your locale(s).
 ```java
     @Override
